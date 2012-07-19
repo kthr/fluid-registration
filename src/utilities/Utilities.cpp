@@ -73,7 +73,7 @@ template<class T>
 T minMod(T x, T y)
 {
 	if (x * y > 0)
-		return (sign(x) + sign(y)) * Min(Abs(x), Abs(y)) / 2;
+		return (Sign(x) + Sign(y)) * Min(Abs(x), Abs(y)) / 2;
 	return (T) 0;
 }
 inline int modulo(int i, int n)
@@ -94,6 +94,11 @@ inline T Sign(T x)
 	if (x > zero)
 		return 1;
 	return zero;
+}
+template<class T>
+inline T Sign(const T&a, const T&b)
+{
+	return b >= 0 ? (a >= 0 ? a : -a) : (a >= 0 ? -a : a);
 }
 void SplineCoefficients(double c[], double u, int i, int n)
 {
@@ -120,6 +125,13 @@ void SplineCoefficients(double c[], double u, int i, int n)
 		c[2] = u * (0.5 + (2. - 1.5 * u) * u);
 		c[3] = 0.5 * (u - 1.) * u2;
 	}
+}
+template<class T>
+void Swap(T*a, T*b)
+{
+	T tmp = *a;
+	*a = *b;
+	*b = tmp;
 }
 template<class T>
 void sort(T*x, int n)

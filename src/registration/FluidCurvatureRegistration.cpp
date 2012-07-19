@@ -141,14 +141,14 @@ void FluidCurvatureRegistration::registerImages()
 	if (boundary < 6)
 	{
 		//rknystroem = new RKNystroemDSolve(this,dim, FluidBiharmonic, PrintFluidProgress);
-		//rknystroem = new RKNystroemDSolve(this,dim, FluidBiharmonic, NULL);
-		//rknystroem->integrate(0.0, tmax, dtStart, u->vx, du->vx, error, true);
+		rknystroem = new RKNystroemDSolve(this,dim, &FluidCurvatureRegistration::FluidBiharmonic, NULL);
+		rknystroem->integrate(0.0, tmax, dtStart, u->vx, du->vx, error, true);
 	}
 	else
 	{
 		rk43 = new RKV43(this);
 		//RKVMethod43(0.0, tmax, dtStart, u->vx, dim, fluid, PrintFluidProgress1, error, true);
-		rk43->RKVMethod43(0.0, tmax, dtStart, u->vx, dim, fluid, NULL, error, true);
+		rk43->RKVMethod43(0.0, tmax, dtStart, u->vx, dim, fluid, &FluidCurvatureRegistration::PrintFluidProgress1, error, true);
 		(this->*fluid)(tmax, u->vx, du->vx, dim);
 	}
 	fftw_cleanup();
@@ -1572,7 +1572,7 @@ int FluidCurvatureRegistration::PrintFluidProgress(double t, double h, double*u,
 }
 int FluidCurvatureRegistration::PrintFluidProgress1(double t, double h, double*u, double*uNext, int n)
 {
-/*
+
 	static int count = 0L;
 	int size, nx, ny;
 	VectorArray2D*u1, *u2;
@@ -1640,7 +1640,7 @@ int FluidCurvatureRegistration::PrintFluidProgress1(double t, double h, double*u
 	{
 		double xmin = t - h, fmin = ImageMatchError;
 
-		ImageDifference idiff = ImageDifference(nx, ny, t, h);
+		ImageDifference idiff = ImageDifference(rk43,templateImage, sampleImage, __wraped, nx, ny, t, h);
 		Brent search1d;
 		search1d.bracket(t - h, t, idiff);
 
@@ -1650,7 +1650,7 @@ int FluidCurvatureRegistration::PrintFluidProgress1(double t, double h, double*u
 		{
 			_lowestError = fmin = search1d.fmin;
 			MinimumTime = xmin;
-			InterpolateRKV4(t, h, xmin, _bestU->vx);
+			rk43->InterpolateRKV4(t, h, xmin, _bestU->vx);
 		}
 	}
 
@@ -1673,6 +1673,6 @@ int FluidCurvatureRegistration::PrintFluidProgress1(double t, double h, double*u
 #endif
 
 	}
-*/
+
 	return RK_OK;
 }

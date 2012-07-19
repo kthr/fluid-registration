@@ -9,7 +9,6 @@
 #define UTILITIES_HPP_
 
 #include <stdlib.h>
-
 #include "../templates/Point2D.hpp"
 
 template<class T>
@@ -31,8 +30,11 @@ T minMod(T x, T y);
 inline int modulo(int i, int n);
 template<class T>
 inline T Sign(T x);
+template<class T>
+inline T Sign(const T&a, const T&b);
 void SplineCoefficients(double c[], double u, int i, int n);
 template<class T>
+void Swap(T*a, T*b);
+template<class T>
 void sort(T*x, int n);
-
 #endif /* UTILITIES_HPP_ */

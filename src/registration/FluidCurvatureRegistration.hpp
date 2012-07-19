@@ -19,6 +19,7 @@
 #include "../templates/Vector2D.hpp"
 #include "../solver/RKNystroem.hpp"
 #include "../solver/RKV43.hpp"
+#include "../utilities/ImageDifference.hpp"
 #include "../../lib/fftw3.h"
 
 #define MAXDOUBLE (1.7976931348623157e308)
