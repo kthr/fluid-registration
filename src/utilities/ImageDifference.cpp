@@ -18,7 +18,7 @@ ImageDifference::~ImageDifference()
 {
 	delete u2;
 }
-inline double ImageDifference::operator()(double tp)
+double ImageDifference::operator()(double tp)
 {
 	double imgDiff;
 	int size = nx * ny;

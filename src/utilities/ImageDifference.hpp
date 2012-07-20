@@ -21,7 +21,7 @@ class ImageDifference
 		int nx, ny;
 		ImageDifference(RKV43 *rkv43, Image<double> *templateImage, Image<double> *sampleImage, Image<double> *wraped, int _nx, int _ny, double _t, double _h);
 		~ImageDifference();
-		inline double operator()(double tp);
+		double operator()(double tp);
 	private:
 		RKV43 *rkv43;
 		Image<double> *templateImage, *sampleImage, *wraped;

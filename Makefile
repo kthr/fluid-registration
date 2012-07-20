@@ -8,7 +8,7 @@ LFLAGS=-L/opt/intel/composer_xe_2011_sp1/lib/ -lirc -limf -liomp5 -L/opt/intel/t
 OBJECTS=${BUILD_DIR}/test.o ${BUILD_DIR}/FluidCurvatureRegistration.o ${BUILD_DIR}/Fourier.o \
 	${BUILD_DIR}/InverseFourier.o ${BUILD_DIR}/SinFourier.o ${BUILD_DIR}/InverseSinFourier.o ${BUILD_DIR}/CosFourier.o \
 	${BUILD_DIR}/InverseCosFourier.o ${BUILD_DIR}/RKNystroem.o ${BUILD_DIR}/RKV43.o ${BUILD_DIR}/VectorArray2D.o \
-	${BUILD_DIR}/Utilities.o ${BUILD_DIR}/ImageDifference.o
+	${BUILD_DIR}/Utilities.o ${BUILD_DIR}/ImageDifference.o ${BUILD_DIR}/BracketMethod.o
 
 all : ${OBJECTS}
 	${CXX} ${LFLAGS} -o test ${OBJECTS}
@@ -51,6 +51,10 @@ ${BUILD_DIR}/Utilities.o : ${SRC_DIR}/utilities/Utilities.cpp ${SRC_DIR}/utiliti
 
 ${BUILD_DIR}/ImageDifference.o : ${SRC_DIR}/utilities/ImageDifference.cpp ${SRC_DIR}/utilities/ImageDifference.hpp
 	${CXX} ${CXXFLAGS} -c ${SRC_DIR}/utilities/ImageDifference.cpp -o ${BUILD_DIR}/ImageDifference.o
+
+${BUILD_DIR}/BracketMethod.o : ${SRC_DIR}/utilities/BracketMethod.cpp ${SRC_DIR}/utilities/BracketMethod.hpp
+	${CXX} ${CXXFLAGS} -c ${SRC_DIR}/utilities/BracketMethod.cpp -o ${BUILD_DIR}/BracketMethod.o
+
 clean :
 	rm build/*
 

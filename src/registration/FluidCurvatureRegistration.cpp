@@ -1640,18 +1640,20 @@ int FluidCurvatureRegistration::PrintFluidProgress1(double t, double h, double*u
 	{
 		double xmin = t - h, fmin = ImageMatchError;
 
-		ImageDifference idiff = ImageDifference(rk43,templateImage, sampleImage, __wraped, nx, ny, t, h);
-		Brent search1d;
-		search1d.bracket(t - h, t, idiff);
+		ImageDifference *idiff = new ImageDifference(rk43,templateImage, sampleImage, __wraped, nx, ny, t, h);
+		Brent *search1d = new Brent();
+		search1d->bracket(t - h, t, idiff);
 
-		xmin = search1d.minimize(idiff);
+		xmin = search1d->minimize(idiff);
 
-		if (_lowestError > search1d.fmin)
+		if (_lowestError > search1d->fmin)
 		{
-			_lowestError = fmin = search1d.fmin;
+			_lowestError = fmin = search1d->fmin;
 			MinimumTime = xmin;
 			rk43->InterpolateRKV4(t, h, xmin, _bestU->vx);
 		}
+		delete idiff;
+		delete search1d;
 	}
 
 	ImageMatchError = imgDiff;
@@ -1673,6 +1675,5 @@ int FluidCurvatureRegistration::PrintFluidProgress1(double t, double h, double*u
 #endif
 
 	}
-
 	return RK_OK;
 }
