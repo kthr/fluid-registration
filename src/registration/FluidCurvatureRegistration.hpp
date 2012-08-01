@@ -47,6 +47,7 @@ class FluidCurvatureRegistration
 		VectorArray2D *u, *du, *_bestU;
 		RKNystroemDSolve *rknystroem;
 		RKV43 *rk43;
+		cimg_library::CImgDisplay display;
 
 		int boundary, ny, nx, returnType, refchannels;
 		long rlen;

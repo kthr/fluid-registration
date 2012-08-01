@@ -51,6 +51,7 @@ FluidCurvatureRegistration::~FluidCurvatureRegistration()
 	delete _bestU;
 	delete rknystroem;
 	delete rk43;
+
 }
 void FluidCurvatureRegistration::registerImages()
 {
@@ -141,14 +142,15 @@ void FluidCurvatureRegistration::registerImages()
 	if (boundary < 6)
 	{
 		//rknystroem = new RKNystroemDSolve(this,dim, FluidBiharmonic, PrintFluidProgress);
-		rknystroem = new RKNystroemDSolve(this,dim, &FluidCurvatureRegistration::FluidBiharmonic, NULL);
+		rknystroem = new RKNystroemDSolve(this, dim, &FluidCurvatureRegistration::FluidBiharmonic, NULL);
 		rknystroem->integrate(0.0, tmax, dtStart, u->vx, du->vx, error, true);
 	}
 	else
 	{
 		rk43 = new RKV43(this);
 		//RKVMethod43(0.0, tmax, dtStart, u->vx, dim, fluid, PrintFluidProgress1, error, true);
-		rk43->RKVMethod43(0.0, tmax, dtStart, u->vx, dim, fluid, &FluidCurvatureRegistration::PrintFluidProgress1, error, true);
+		rk43->RKVMethod43(0.0, tmax, dtStart, u->vx, dim, fluid, &FluidCurvatureRegistration::PrintFluidProgress1,
+				error, true);
 		//rk43->RKVMethod43(0.0, tmax, dtStart, u->vx, dim, fluid, NULL, error, true);
 		(this->*fluid)(tmax, u->vx, du->vx, dim);
 	}
@@ -164,14 +166,9 @@ void FluidCurvatureRegistration::registerImages()
 	}
 	if (0.0 == MinimumTime)
 		MinimumTime = tmax;
-	const cimg_library::CImg<double> *img = new cimg_library::CImg<double>(sampleImage->bm,sampleImage->nx,sampleImage->ny);
-	img->display("before");
-	delete img;
+
 	sampleImage->wrap(u);
 	sampleImage->clipRange(0, sMin, sMax);
-	img = new cimg_library::CImg<double>(sampleImage->bm,sampleImage->nx,sampleImage->ny);
-	img->display("after");
-	delete img;
 	if (ref)
 	{
 		ref->wrap(u);
@@ -1399,11 +1396,19 @@ void FluidCurvatureRegistration::FluidOverDamped(double, double*y, double*dy, in
 	nx = templateImage->nx;
 	ny = templateImage->ny;
 	size = nx * ny;
-	u = new VectorArray2D(nx,ny,1.,1.);
+	u = (VectorArray2D*) malloc(sizeof(VectorArray2D));
+	u->nx = nx;
+	u->ny = ny;
+	u->dx = 1.0;
+	u->dy = 1.0;
 	u->vx = y;
 	u->vy = y + size;
 
-	f = new VectorArray2D(nx,ny,1.,1.);
+	f = (VectorArray2D*) malloc(sizeof(VectorArray2D));
+	f->nx = nx;
+	f->ny = ny;
+	f->dx = 1.0;
+	f->dy = 1.0;
 	f->vx = dy;
 	f->vy = dy + size;
 
@@ -1443,8 +1448,8 @@ void FluidCurvatureRegistration::FluidOverDamped(double, double*y, double*dy, in
 	}
 	(this->*OverdampedLameSolve)(f, f, DampingRatio);
 
-	delete u;
-	delete f;
+	free(u);
+	free(f);
 }
 void FluidCurvatureRegistration::FluidBiharmonic(double*d2y, double, double*y, double*dy, int n)
 {
@@ -1457,15 +1462,15 @@ void FluidCurvatureRegistration::FluidBiharmonic(double*d2y, double, double*y, d
 	ny = templateImage->ny;
 	size = nx * ny;
 
-	u = new VectorArray2D(nx,ny,1.,1.);
+	u = new VectorArray2D(nx, ny, 1., 1.);
 	u->vx = y;
 	u->vy = y + size;
 
-	du = new VectorArray2D(nx,ny,1.,1.);
+	du = new VectorArray2D(nx, ny, 1., 1.);
 	du->vx = dy;
 	du->vy = dy + size;
 
-	f = new VectorArray2D(nx,ny,1.,1.);
+	f = new VectorArray2D(nx, ny, 1., 1.);
 	f->vx = d2y;
 	f->vy = d2y + size;
 
@@ -1635,9 +1640,9 @@ int FluidCurvatureRegistration::PrintFluidProgress1(double t, double h, double*u
 	imgDiff = sqrt(imgDiff);
 	imgDiff /= size;
 
-	const cimg_library::CImg<double> *img = new cimg_library::CImg<double>(__wraped->bm,__wraped->nx,__wraped->ny);
-	img->display("before");
-	delete img;
+
+	const cimg_library::CImg<double> img(__wraped->bm, __wraped->nx, __wraped->ny);
+	display = img.display(display.wait(100));
 
 	u1->vx = u1->vy = NULL;
 	u2->vx = u2->vy = NULL;
@@ -1651,7 +1656,7 @@ int FluidCurvatureRegistration::PrintFluidProgress1(double t, double h, double*u
 	{
 		double xmin = t - h, fmin = ImageMatchError;
 
-		ImageDifference *idiff = new ImageDifference(rk43,templateImage, sampleImage, __wraped, nx, ny, t, h);
+		ImageDifference *idiff = new ImageDifference(rk43, templateImage, sampleImage, __wraped, nx, ny, t, h);
 		Brent *search1d = new Brent();
 		search1d->bracket(t - h, t, idiff);
 
