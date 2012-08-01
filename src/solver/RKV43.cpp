@@ -15,7 +15,7 @@ void RKV43::rkv1(double x, double h, double y[], int n, void (FluidCurvatureRegi
 		double*err)
 {
 	double ycorr;
-	register int i;
+	int i;
 
 	((fr)->*(diffy))(x, y, k1, n);
 	for (i = 0; i < n; i++)
@@ -185,11 +185,11 @@ int RKV43::RKVMethod43(double x0, double xe, double h, double y[], int n, void (
 		int (FluidCurvatureRegistration::*output)(double, double, double*, double*, int), double localerror, bool parallelQ)
 
 {
-	register int i;
-	register double x;
-	register double hnew, hfac;
+	int i;
+	double x;
+	double hnew, hfac;
 	double ddx, error_est;
-	double*ynew;
+	double *ynew;
 	bool succ;
 	double int_length;
 
@@ -201,9 +201,10 @@ int RKV43::RKVMethod43(double x0, double xe, double h, double y[], int n, void (
 	ddx = fabs(xe - x0);
 	int_length = (double) 1.0 / (xe - x0);
 	k1 = new double[n];
-	k5 = k2 = new double[n];
+	k2 = new double[n];
 	k3 = new double[n];
 	k4 = new double[n];
+	k5 = k2;
 	yy = new double[n];
 	ynew = new double[n];
 	hnew = h;
@@ -279,7 +280,6 @@ int RKV43::RKVMethod43(double x0, double xe, double h, double y[], int n, void (
 			}
 	} while ((fabs((x - x0) * int_length) + tiny < 1.0));
 	RKV_active = false;
-
 	{
 		delete[] k1;
 		delete[] k2;
@@ -288,7 +288,6 @@ int RKV43::RKVMethod43(double x0, double xe, double h, double y[], int n, void (
 		delete[] yy;
 		delete[] ynew;
 	}
-
 	return RK_OK;
 }
 int RKV43::InterpolateRKV4(double x, double h, double xp, double yp[])

@@ -11,14 +11,27 @@ using namespace cimg_library;
 
 int main()
 {
-	CImg<double> *tImage = new CImg<double>("/Users/kthierbach/Documents/data/brox/timg.png");
-	CImg<double> *sImage = new CImg<double>("/Users/kthierbach/Documents/data/brox/simg.png");
+	CImg<double> *tImage = new CImg<double>("./U.png");
+	CImg<double> *sImage = new CImg<double>("./X.png");
 
 	printf("tImage channels: %d dx: %d dy: %d\n", tImage->spectrum(), tImage->width(), tImage->height());
 	printf("sImage channels: %d dx: %d dy: %d\n", sImage->spectrum(), sImage->width(), sImage->height());
-	FluidCurvatureRegistration *reg = new FluidCurvatureRegistration(7, tImage->width(), tImage->height(),
-			tImage->data(), (long int) tImage->size(), sImage->data(), (long int) sImage->size(), 64., 0.001, 1, 1.0,
-			1.0, 1.0, 0.25, 0., .5, 0.00005, 1, NULL, 1, NULL, 0);
+	double 	t_end = 1.,
+			dt_start = 0.001,
+			alpha = 256, //SmoothWeight
+			viscosity = 1.,
+			localDamping = 1.,
+			vortexWeight = 0.,
+			mu = 1., //LameMu
+			lambda = 0.25, //LameLambda
+			localError = .5,
+			mismatch = 0.00005; //MismatchError
+	int 	method = 7, //boundary
+			returnType = 1;
+
+	FluidCurvatureRegistration *reg = new FluidCurvatureRegistration(method, tImage->width(), tImage->height(),
+			tImage->data(), (long int) tImage->size(), sImage->data(), (long int) sImage->size(), t_end, dt_start, alpha,
+			viscosity, localDamping, mu, lambda, vortexWeight, localError, mismatch,returnType, NULL, 1, NULL, 0);
 	reg->registerImages();
 	delete tImage;
 	delete sImage;

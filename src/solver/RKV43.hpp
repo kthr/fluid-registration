@@ -32,23 +32,25 @@ static const double c1 = 9. / 50., c3 = 128. / 147., c4 = -1024. / 3675., c5 = 6
 static const double d1 = -67. / 1350, d3 = 536. / 1323., d4 = -2144. / 3675., d5 = 67. / 294.;
 
 class FluidCurvatureRegistration;
-class RKV43{
+class RKV43
+{
 	public:
 		RKV43(FluidCurvatureRegistration *fr);
-		int RKVMethod43(double x0, double xe, double h, double y[], int n, void (FluidCurvatureRegistration::*diffy)(double, double*, double*, int),
-				int (FluidCurvatureRegistration::*output)(double, double, double*, double*, int), double localerror, bool parallelQ = true);
+		int RKVMethod43(double x0, double xe, double h, double y[], int n,
+				void (FluidCurvatureRegistration::*diffy)(double, double*, double*, int),
+				int (FluidCurvatureRegistration::*output)(double, double, double*, double*, int), double localerror,
+				bool parallelQ = true);
 		int InterpolateRKV4(double x, double h, double xp, double yp[]);
-		void rkv1(double x, double h, double y[], int n, void (FluidCurvatureRegistration::*diffy)(double, double*, double*, int), double ynew[],
-				double*err);
-		void parallelRkv1(double x, double h, double y[], int n, void (FluidCurvatureRegistration::*diffy)(double, double*, double*, int),
-				double ynew[], double*err, int grainSize = 8192);
-	private:
-		FluidCurvatureRegistration *fr;
+		void rkv1(double x, double h, double y[], int n,
+				void (FluidCurvatureRegistration::*diffy)(double, double*, double*, int), double ynew[], double*err);
+		void parallelRkv1(double x, double h, double y[], int n,
+				void (FluidCurvatureRegistration::*diffy)(double, double*, double*, int), double ynew[], double*err,
+				int grainSize = 8192);
 		double *k1, *k2, *k3, *k4, *k5, *yy;
 		int eqn_no;
 		bool RKV_active;
+	private:
+		FluidCurvatureRegistration *fr;
 };
-
-
 
 #endif /* RKV43_HPP_ */

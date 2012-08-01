@@ -149,6 +149,7 @@ void FluidCurvatureRegistration::registerImages()
 		rk43 = new RKV43(this);
 		//RKVMethod43(0.0, tmax, dtStart, u->vx, dim, fluid, PrintFluidProgress1, error, true);
 		rk43->RKVMethod43(0.0, tmax, dtStart, u->vx, dim, fluid, &FluidCurvatureRegistration::PrintFluidProgress1, error, true);
+		//rk43->RKVMethod43(0.0, tmax, dtStart, u->vx, dim, fluid, NULL, error, true);
 		(this->*fluid)(tmax, u->vx, du->vx, dim);
 	}
 	fftw_cleanup();
@@ -163,8 +164,14 @@ void FluidCurvatureRegistration::registerImages()
 	}
 	if (0.0 == MinimumTime)
 		MinimumTime = tmax;
+	const cimg_library::CImg<double> *img = new cimg_library::CImg<double>(sampleImage->bm,sampleImage->nx,sampleImage->ny);
+	img->display("before");
+	delete img;
 	sampleImage->wrap(u);
 	sampleImage->clipRange(0, sMin, sMax);
+	img = new cimg_library::CImg<double>(sampleImage->bm,sampleImage->nx,sampleImage->ny);
+	img->display("after");
+	delete img;
 	if (ref)
 	{
 		ref->wrap(u);
@@ -1627,6 +1634,10 @@ int FluidCurvatureRegistration::PrintFluidProgress1(double t, double h, double*u
 
 	imgDiff = sqrt(imgDiff);
 	imgDiff /= size;
+
+	const cimg_library::CImg<double> *img = new cimg_library::CImg<double>(__wraped->bm,__wraped->nx,__wraped->ny);
+	img->display("before");
+	delete img;
 
 	u1->vx = u1->vy = NULL;
 	u2->vx = u2->vy = NULL;

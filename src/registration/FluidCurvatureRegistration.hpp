@@ -22,6 +22,7 @@
 #include "../utilities/ImageDifference.hpp"
 #include "../utilities/BracketMethod.hpp"
 #include "../../lib/fftw3.h"
+#include "../../lib/CImg-1.5.0/CImg.h"
 
 #define MAXDOUBLE (1.7976931348623157e308)
 #define Re(c) (c)[0]
