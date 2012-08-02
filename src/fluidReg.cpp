@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
 	{
 		char message[3072];
 		strlcat(message, "Failed to open sample image '", 1024);
-		strlcat(message, argv[argc - 2], 1024);
+		strlcat(message, argv[argc - 1], 1024);
 		strlcat(message, "'.\n", 1024);
 		fprintf(stderr, message);
 		return 1;
