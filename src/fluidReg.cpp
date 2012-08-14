@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
 		strlcat(message, "Failed to open template image '", 1024);
 		strlcat(message, argv[argc - 2], 1024);
 		strlcat(message, "'.\n", 1024);
-		fprintf(stderr, message);
+		fprintf(stderr, "%s", message);
 		return 1;
 	}
 	try
@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
 		strlcat(message, "Failed to open sample image '", 1024);
 		strlcat(message, argv[argc - 1], 1024);
 		strlcat(message, "'.\n", 1024);
-		fprintf(stderr, message);
+		fprintf(stderr, "%s", message);
 		return 1;
 	}
 	std::cout << "Time: " << t_end << ", MismatchError: " << mismatch << ", SmoothWeight: " << alpha << "\n";
@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
 				strlcat(message, "Failed to save reference image at '", 1024);
 				strlcat(message, patternFile, 1024);
 				strlcat(message, "'.\n", 1024);
-				fprintf(stderr, message);
+				fprintf(stderr, "%s", message);
 				return 1;
 			}
 		}
@@ -201,7 +201,7 @@ int main(int argc, char *argv[])
 			strlcat(message, "Failed to save flow field at '", 1024);
 			strlcat(message, flowFile, 1024);
 			strlcat(message, "'.\n", 1024);
-			fprintf(stderr, message);
+			fprintf(stderr, "%s", message);
 			return 1;
 		}
 	}

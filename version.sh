@@ -1,12 +1,12 @@
 #!/bin/bash
-LOCALVER=`git rev-list HEAD | wc -l`
+LOCALVER=`/opt/local/bin/git rev-list HEAD | wc -l`
 if [ $LOCALVER \> 1 ] ; then
-    VER=`git rev-list origin/master | wc -l`
+    VER=`/opt/local/bin/git rev-list origin/master | wc -l`
     VER_DIFF=$(($LOCALVER-$VER))
     if [ $VER_DIFF != 0 ] ; then
         VER="$VER+$VER_DIFF"
     fi
-    if git status | grep -q "modified:" ; then
+    if /opt/local/bin/git status | grep -q "modified:" ; then
         VER="${VER}M"
     fi
 	VER=`echo ${VER} | sed 's/\ //'`
