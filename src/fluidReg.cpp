@@ -125,11 +125,7 @@ int main(int argc, char *argv[])
 		templateImage = new CImg<double>(argv[argc - 2]);
 	} catch (CImgException &e)
 	{
-		char message[3072];
-		strlcat(message, "Failed to open template image '", 1024);
-		strlcat(message, argv[argc - 2], 1024);
-		strlcat(message, "'.\n", 1024);
-		fprintf(stderr, "%s", message);
+		fprintf(stderr, "Failed to open template image '%s'.\n", argv[argc - 2]);
 		return 1;
 	}
 	try
@@ -137,11 +133,7 @@ int main(int argc, char *argv[])
 		sampleImage = new CImg<double>(argv[argc - 1]);
 	} catch (CImgException &e)
 	{
-		char message[3072];
-		strlcat(message, "Failed to open sample image '", 1024);
-		strlcat(message, argv[argc - 1], 1024);
-		strlcat(message, "'.\n", 1024);
-		fprintf(stderr, "%s", message);
+		fprintf(stderr, "Failed to open sample image '%s'.\n", argv[argc - 1]);
 		return 1;
 	}
 	std::cout << "Time: " << t_end << ", MismatchError: " << mismatch << ", SmoothWeight: " << alpha << "\n";
@@ -179,11 +171,7 @@ int main(int argc, char *argv[])
 				patternImage->save(patternFile);
 			} catch (CImgException &e)
 			{
-				char message[3072];
-				strlcat(message, "Failed to save reference image at '", 1024);
-				strlcat(message, patternFile, 1024);
-				strlcat(message, "'.\n", 1024);
-				fprintf(stderr, "%s", message);
+				fprintf(stderr, "Failed to save reference image at '%s'.\n", patternFile);
 				return 1;
 			}
 		}
@@ -197,11 +185,7 @@ int main(int argc, char *argv[])
 	{
 		if (!reg->getFlowField()->save(flowFile))
 		{
-			char message[3072];
-			strlcat(message, "Failed to save flow field at '", 1024);
-			strlcat(message, flowFile, 1024);
-			strlcat(message, "'.\n", 1024);
-			fprintf(stderr, "%s", message);
+			fprintf(stderr, "Failed to save flow field at '%s'.\n", flowFile);
 			return 1;
 		}
 	}
