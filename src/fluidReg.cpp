@@ -45,11 +45,11 @@ int main(int argc, char *argv[])
 				}
 				break;
 			case 'h':
-			#ifdef REVISION
-				cout << "Revision: " << REVISION;
-			#else
-				cout << "Revision: Unknown";
-			#endif
+				#ifdef REVISION
+					cout << "Revision: " << REVISION << "\n";
+				#else
+					cout << "Revision: Unknown" << "\n";
+				#endif
 				cout << "Usage: fluidReg [OPTIONS]... templateImage sampleImage\n";
 				cout << "Example: fluidReg -t 64 -m 0.00001 -s 200 -f flow.dat -p pattern.png template.png sample.png\n\n";
 				cout << "Registration parameters:\n";
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 				cout << "\t -m NUM \t specifies mismatch error for the two images (default=0.0005)\n";
 				cout << "\t -p file \t the file where to save the displaced sample or reference pattern\n";
 				cout << "\t -r file \t the reference image\n";
-				cout << "\t -s NUM \t specifies the smooth weight which controls the viscosity (default=1.)\n";
+				cout << "\t -s NUM \t specifies the smooth weight which controls the viscosity (default=2.)\n";
 				cout << "\t -t NUM \t specifies the final time of the iteration process (default=64.)\n";
 				return 0;
 			case 'm':
