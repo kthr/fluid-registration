@@ -17,7 +17,7 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-	CImg<double> *templateImage, *sampleImage, *referenceImage = NULL, *patternImage;
+	CImg<double> *templateImage, *sampleImage, *referenceImage = NULL, *patternImage = NULL;
 	FluidCurvatureRegistration *reg;
 	double t_end = 64., dt_start = 0.001, alpha = 2, //SmoothWeight
 			viscosity = 1., localDamping = 1., vortexWeight = 0., mu = 1., //LameMu
@@ -169,10 +169,10 @@ int main(int argc, char *argv[])
 		reg->registerImages();
 	}
 
-	if (referenceImage)
+	if (referenceImage != NULL)
 	{
 		patternImage = new CImg<double>(reg->getReference()->bm, reg->getReference()->ny, reg->getReference()->nx);
-		if (patternFile)
+		if (patternFile != NULL)
 		{
 			try
 			{
@@ -193,7 +193,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	if (flowFile)
+	if (flowFile != NULL)
 	{
 		if (!reg->getFlowField()->save(flowFile))
 		{

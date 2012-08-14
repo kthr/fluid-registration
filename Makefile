@@ -2,8 +2,8 @@ SRC_DIR=src
 BUILD_DIR=build
 
 CXX=icpc
-CXXFLAGS=-O3 -fopenmp -I/opt/intel/tbb/include -Ilib -Ilib/CImg-1.5.0 -Isrc/filter -Isrc/fourier_transform -Isrc/registration -Isrc/segmentation -Isrc/templates -Isrc/utilities
-LFLAGS=-O3 -L/opt/intel/composer_xe_2011_sp1/lib/ -lirc -limf -liomp5 -L/opt/intel/tbb/lib -ltbb -L/usr/X11R6/lib -lm -lpthread -lX11 -Llib/MacOSX-x86-64 -lfftw3 -lstdc++
+CXXFLAGS=-parallel -O3 -fopenmp -I/opt/intel/tbb/include -Ilib -Ilib/CImg-1.5.0 -Isrc/filter -Isrc/fourier_transform -Isrc/registration -Isrc/segmentation -Isrc/templates -Isrc/utilities
+LFLAGS=-L/opt/intel/composer_xe_2011_sp1/lib/ -lirc -limf -liomp5 -L/opt/intel/tbb/lib -ltbb -L/usr/X11R6/lib -lpthread -lX11 -Llib/MacOSX-x86-64 -lfftw3 -lstdc++
 
 OBJECTS=${BUILD_DIR}/fluidReg.o ${BUILD_DIR}/FluidCurvatureRegistration.o ${BUILD_DIR}/Fourier.o \
 	${BUILD_DIR}/InverseFourier.o ${BUILD_DIR}/SinFourier.o ${BUILD_DIR}/InverseSinFourier.o ${BUILD_DIR}/CosFourier.o \
