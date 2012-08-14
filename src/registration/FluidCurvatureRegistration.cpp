@@ -141,7 +141,7 @@ void FluidCurvatureRegistration::registerImages()
 
 	if (boundary < 6)
 	{
-		//rknystroem = new RKNystroemDSolve(this,dim, FluidBiharmonic, PrintFluidProgress);
+		//rknystroem = new RKNystroemDSolve(this,dim, &FluidCurvatureRegistration::FluidBiharmonic, PrintFluidProgress);
 		rknystroem = new RKNystroemDSolve(this, dim, &FluidCurvatureRegistration::FluidBiharmonic, NULL);
 		rknystroem->integrate(0.0, tmax, dtStart, u->vx, du->vx, error, true);
 	}
@@ -176,123 +176,8 @@ void FluidCurvatureRegistration::registerImages()
 			ref->clipRange(ch, rMin[ch], rMax[ch]);
 	}
 
-	/*
-	 if (0 == returnType)
-	 {
-	 MLPutFunction(stdlink, "List", ref ? 4 : 3);
-	 sampleImage->toMathematica(stdlink);
-	 if (ref)
-	 ref->toMathematica(stdlink);
-	 MLPutFunction(stdlink, "Rule", 2);
-	 MLPutSymbol(stdlink, "MismatchError");
-	 MLPutDouble(stdlink, ImageMatchError);
-	 MLPutFunction(stdlink, "Rule", 2);
-	 MLPutSymbol(stdlink, "MinimumTime");
-	 MLPutDouble(stdlink, MinimumTime);
-	 }
-	 else
-	 {
-	 MLPutFunction(stdlink, "List", ref ? 6 : 5);
-	 sampleImage->toMathematica(stdlink);
-	 if (ref)
-	 ref->toMathematica(stdlink);
-	 MLPutFunction(stdlink, "Rule", 2);
-	 MLPutSymbol(stdlink, "Global`DisplacementField");
-	 u->toMathematica(stdlink);
-	 MLPutFunction(stdlink, "Rule", 2);
-	 MLPutSymbol(stdlink, "Global`VelocityField");
-	 du->toMathematica(stdlink);
-	 MLPutFunction(stdlink, "Rule", 2);
-	 MLPutSymbol(stdlink, "MismatchError");
-	 MLPutDouble(stdlink, ImageMatchError);
-	 MLPutFunction(stdlink, "Rule", 2);
-	 MLPutSymbol(stdlink, "MinimumTime");
-	 MLPutDouble(stdlink, MinimumTime);
-	 }
-
-	 if (*vfieldfile)
-	 {
-	 char osfile[4096];
-	 PrepareOSFilename(osfile, vfieldfile);
-	 u->save(osfile);
-	 }
-	 */
-
 	delete[] rMin;
 	delete[] rMax;
-}
-void foldWrapImageWithSaveVectorfield(int medwidth, int ny, int nx, int ch, int*data, long)
-{
-	/*
-	 Image<int> *img;
-	 MLINK loopback;
-	 int nfiles;
-	 int error;
-	 int*minImg, *maxImg;
-	 const char*head;
-
-	 loopback = MLLoopbackOpen(stdenv, &error);
-	 if (loopback == (MLINK) 0 || error != MLEOK)
-	 {
-	 MLPutSymbol(stdlink, "$Failed");
-	 return;
-	 }
-
-	 MLGetFunction(stdlink, &head, &nfiles);
-	 if (strcmp(head, "List"))
-	 {
-	 MLPutSymbol(stdlink, "$Failed");
-	 return;
-	 }
-	 img = new Image<int>(data, nx, ny, ch);
-	 minImg = new int[ch];
-	 maxImg = new int[ch];
-	 for (int c = 0; c < ch; c++)
-	 {
-	 minImg[c] = img->min(c);
-	 maxImg[c] = img->max(c);
-	 }
-	 MLPutFunction(loopback, "List", nfiles);
-
-	 for (int n = 0; n < nfiles; n++)
-	 {
-	 VectorArray2D*u;
-	 bool succ;
-	 const char*fname;
-	 char osfilename[4096];
-	 u = new VectorArray2D(nx, ny);
-
-	 MLGetString(stdlink, &fname);
-	 PrepareOSFilename(osfilename, fname);
-	 MLDisownString(stdlink, fname);
-
-	 succ = u->load(osfilename);
-	 if (!succ || u->nx != nx || u->ny != ny)
-	 {
-	 MLPutSymbol(loopback, "$Failed");
-	 delete u;
-	 continue;
-	 }
-	 img->wrap(u);
-	 if (medwidth)
-	 {
-	 Image<int> *med = MedianFilter(img, medwidth);
-	 delete img;
-	 img = med;
-	 }
-	 delete u;
-
-	 for (int c = 0; c < ch; c++)
-	 img->clipRange(c, minImg[c], maxImg[c]);
-	 img->toMathematica(loopback);
-
-	 }
-	 MLTransferToEndOfLoopbackLink(stdlink, loopback);
-	 delete img;
-	 delete[] minImg;
-	 delete[] maxImg;
-	 MLClose(loopback);
-	 */
 }
 void FluidCurvatureRegistration::PeriodicBiharmonicSolve(VectorArray2D*solution, VectorArray2D*ff)
 {
@@ -1582,6 +1467,7 @@ int FluidCurvatureRegistration::PrintFluidProgress(double t, double h, double*u,
 		return RKN_OUTPUT_HALT;
 	return RKN_OUTPUT_OK;
 }
+
 int FluidCurvatureRegistration::PrintFluidProgress1(double t, double h, double*u, double*uNext, int n)
 {
 
@@ -1692,4 +1578,12 @@ int FluidCurvatureRegistration::PrintFluidProgress1(double t, double h, double*u
 
 	}
 	return RK_OK;
+}
+VectorArray2D* FluidCurvatureRegistration::getFlowField() const
+{
+	return u;
+}
+Image<double>* FluidCurvatureRegistration::getReference() const
+{
+	return ref;
 }

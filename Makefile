@@ -14,6 +14,7 @@ all : ${OBJECTS}
 	${CXX} ${LFLAGS} -o fluidReg ${OBJECTS}
 
 ${BUILD_DIR}/fluidReg.o : ${SRC_DIR}/fluidReg.cpp
+	./version.sh
 	${CXX} ${CXXFLAGS} -c ${SRC_DIR}/fluidReg.cpp -o ${BUILD_DIR}/fluidReg.o
 
 ${BUILD_DIR}/FluidCurvatureRegistration.o : ${SRC_DIR}/registration/FluidCurvatureRegistration.cpp ${SRC_DIR}/registration/FluidCurvatureRegistration.hpp
