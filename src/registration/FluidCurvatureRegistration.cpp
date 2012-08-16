@@ -1526,9 +1526,11 @@ int FluidCurvatureRegistration::PrintFluidProgress1(double t, double h, double*u
 	imgDiff = sqrt(imgDiff);
 	imgDiff /= size;
 
-
-	const cimg_library::CImg<double> img(__wraped->bm, __wraped->ny, __wraped->nx);
-	img.display(display.wait(100));
+	if(returnType)
+	{
+		const cimg_library::CImg<double> img(__wraped->bm, __wraped->ny, __wraped->nx);
+		img.display(display.wait(100));
+	}
 
 	u1->vx = u1->vy = NULL;
 	u2->vx = u2->vy = NULL;

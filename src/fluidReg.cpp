@@ -27,9 +27,10 @@ int main(int argc, char *argv[])
 			returnType = 1;
 	int option;
 	char *flowFile = NULL, *patternFile = NULL;
+	bool verbose = 0;
 
 	cimg::exception_mode(0);
-	while ((option = getopt(argc, argv, "f:hm:p:r:s:t:")) != EOF)
+	while ((option = getopt(argc, argv, "f:hm:p:r:s:t:v")) != EOF)
 	{
 		switch (option)
 		{
@@ -60,6 +61,7 @@ int main(int argc, char *argv[])
 				cout << "\t -r file \t the reference image\n";
 				cout << "\t -s NUM \t specifies the smooth weight which controls the viscosity (default=2.)\n";
 				cout << "\t -t NUM \t specifies the final time of the iteration process (default=64.)\n";
+				cout << "\t -v \t\t turns on verbose output (transformed sample image is shown)";
 				return 0;
 			case 'm':
 				if ((mismatch = atof(optarg)) == 0.)
@@ -101,6 +103,9 @@ int main(int argc, char *argv[])
 					fprintf(stderr, "Invalid or missing argument for option -%c.\n", optopt);
 					return 1;
 				}
+				break;
+			case 'v':
+				verbose = 1;
 				break;
 			case '?':
 				if (optopt == 't' || optopt == 'm' || optopt == 's')
@@ -148,7 +153,7 @@ int main(int argc, char *argv[])
 		reg = new FluidCurvatureRegistration(method, templateImage->width(), templateImage->height(),
 				templateImage->data(), (long int) templateImage->size(), sampleImage->data(),
 				(long int) sampleImage->size(), t_end, dt_start, alpha, viscosity, localDamping, mu, lambda,
-				vortexWeight, localError, mismatch, returnType, NULL, referenceImage->spectrum(),
+				vortexWeight, localError, mismatch, verbose, NULL, referenceImage->spectrum(),
 				referenceImage->data(), (long int) referenceImage->size());
 		reg->registerImages();
 	}
@@ -157,7 +162,7 @@ int main(int argc, char *argv[])
 		reg = new FluidCurvatureRegistration(method, templateImage->width(), templateImage->height(),
 				templateImage->data(), (long int) templateImage->size(), sampleImage->data(),
 				(long int) sampleImage->size(), t_end, dt_start, alpha, viscosity, localDamping, mu, lambda,
-				vortexWeight, localError, mismatch, returnType, NULL, 1, NULL, 0);
+				vortexWeight, localError, mismatch, verbose, NULL, 1, NULL, 0);
 		reg->registerImages();
 	}
 
