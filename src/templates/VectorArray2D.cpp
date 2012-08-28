@@ -1202,12 +1202,10 @@ Vector2D VectorArray2D::laplace(int i, int j)
 bool VectorArray2D::save(const char*fname)
 {
 	FILE * f;
-	int type = 0;
 	int magic = VectorArrayMagic;
 	f = fopen(fname, "wb");
 	if (!f)
 		return false;
-	fwrite(&type,sizeof(int),1,f);//put identifier to file, is 0 for dip
 	fwrite(&magic, sizeof(int), 1, f);
 	fwrite(&dx, sizeof(double), 1, f);
 	fwrite(&dy, sizeof(double), 1, f);
@@ -1225,12 +1223,6 @@ bool VectorArray2D::load(const char*fname)
 	f = fopen(fname, "rb");
 	if (!f)
 		return false;
-	fread(&type, sizeof(int), 1, f);
-	if(type != 0)
-	{
-		fclose(f);
-		return false;
-	}
 	fread(&magic, sizeof(int), 1, f);
 	if (magic != VectorArrayMagic)
 	{
