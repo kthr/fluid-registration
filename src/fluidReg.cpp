@@ -8,7 +8,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <unistd.h>
-#include "fluidReg.hpp";
+#include "fluidReg.hpp"
 #include "registration/FluidCurvatureRegistration.hpp"
 #include "../lib/CImg-1.5.0/CImg.h"
 
