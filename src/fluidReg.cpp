@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 				cout << "\t -r file \t the reference image\n";
 				cout << "\t -s NUM \t specifies the smooth weight which controls the viscosity (default=2.)\n";
 				cout << "\t -t NUM \t specifies the final time of the iteration process (default=64.)\n";
-				cout << "\t -v \t\t turns on verbose output (transformed sample image is shown)";
+				cout << "\t -v \t\t turns on verbose output (transformed sample image is shown)\n";
 				return 0;
 			case 'm':
 				if ((mismatch = atof(optarg)) == 0.)
