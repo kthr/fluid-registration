@@ -23,8 +23,7 @@ int main(int argc, char *argv[])
 			viscosity = 1., localDamping = 1., vortexWeight = 0., mu = 1., //LameMu
 			lambda = 0.25, //LameLambda
 			localError = .5, mismatch = 0.0005; //MismatchError
-	int method = 7, //boundary
-			returnType = 1;
+	int method = 7; //boundary
 	int option;
 	char *flowFile = NULL, *patternFile = NULL;
 	bool verbose = 0;

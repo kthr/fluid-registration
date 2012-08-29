@@ -59,7 +59,6 @@ void FluidCurvatureRegistration::registerImages()
 	int dim;
 	double sMin, sMax;
 	double*rMin = NULL, *rMax = NULL;
-	int mu;
 
 	sMin = sampleImage->min(0);
 	sMax = sampleImage->max(0);

@@ -63,11 +63,11 @@ class RKNComputeArg2
 		}
 
 	private:
+		double*yarg;
+		double*yparg;
 		double* const f1;
 		double* const y;
 		double* const yp;
-		double*yarg;
-		double*yparg;
 		double h, h2;
 };
 class RKNComputeArg3
@@ -126,12 +126,12 @@ class RKNComputeArg3
 		}
 
 	private:
+		double*yarg;
+		double*yparg;
 		double* const f1;
 		double* const f2;
 		double* const y;
 		double* const yp;
-		double*yarg;
-		double*yparg;
 		double h, h2;
 };
 class RKNComputeArg4
@@ -192,13 +192,13 @@ class RKNComputeArg4
 		}
 
 	private:
+		double*yarg;
+		double*yparg;
 		double* const f1;
 		double* const f2;
 		double* const f3;
 		double* const y;
 		double* const yp;
-		double*yarg;
-		double*yparg;
 		double h, h2;
 };
 class RKNComputeArg5
@@ -263,14 +263,14 @@ class RKNComputeArg5
 		}
 
 	private:
+		double*yarg;
+		double*yparg;
 		double* const f1;
 		double* const f2;
 		double* const f3;
 		double* const f4;
 		double* const y;
 		double* const yp;
-		double*yarg;
-		double*yparg;
 		double h, h2;
 };
 class RKNComputeArg6
@@ -335,6 +335,9 @@ class RKNComputeArg6
 		}
 
 	private:
+
+		double*yarg;
+		double*yparg;
 		double* const f1;
 		double* const f2;
 		double* const f3;
@@ -342,8 +345,6 @@ class RKNComputeArg6
 		double* const f5;
 		double* const y;
 		double* const yp;
-		double*yarg;
-		double*yparg;
 		double h, h2;
 };
 class RKNComputeArg7
@@ -408,6 +409,8 @@ class RKNComputeArg7
 		}
 
 	private:
+		double*yarg;
+		double*yparg;
 		double* const f1;
 		double* const f2;
 		double* const f3;
@@ -416,8 +419,6 @@ class RKNComputeArg7
 		double* const f6;
 		double* const y;
 		double* const yp;
-		double*yarg;
-		double*yparg;
 		double h, h2;
 };
 class RKNComputeNext
@@ -494,6 +495,8 @@ class RKNComputeNext
 			erryp += b.erryp;
 		}
 	private:
+		double*yNew;
+		double*ypNew;
 		double* const f1;
 		double* const f2;
 		double* const f3;
@@ -503,13 +506,13 @@ class RKNComputeNext
 		double* const f7;
 		double* const y;
 		double* const yp;
-		double*yNew;
-		double*ypNew;
 		double h, h2;
 };
 
-RKNystroemDSolve::RKNystroemDSolve(FluidCurvatureRegistration *fr, int dim, void (FluidCurvatureRegistration::*f)(double*, double, double*, double*, int),
-		int (FluidCurvatureRegistration::*out)(double, double, double*, double*, double*, double*, int) /*= NULL*/) : fr(fr)
+RKNystroemDSolve::RKNystroemDSolve(FluidCurvatureRegistration *fr, int dim,
+		void (FluidCurvatureRegistration::*f)(double*, double, double*, double*, int),
+		int (FluidCurvatureRegistration::*out)(double, double, double*, double*, double*, double*, int) /*= NULL*/) :
+		fr(fr)
 {
 	n = dim;
 	f1 = new double[n];
