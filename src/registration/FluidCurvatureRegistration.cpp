@@ -22,6 +22,9 @@ FluidCurvatureRegistration::FluidCurvatureRegistration(int boundary, int ny, int
 	{
 		ref = new Image<double>(refpat, nx, ny, refchannels);
 	}
+	{
+		ref = NULL;
+	}
 	_fx = (fftw_complex*) fftw_malloc(nx * ny * sizeof(fftw_complex));
 	_fy = (fftw_complex*) fftw_malloc(nx * ny * sizeof(fftw_complex));
 	_fxhat = (fftw_complex*) fftw_malloc(nx * ny * sizeof(fftw_complex));
