@@ -178,6 +178,8 @@ void FluidCurvatureRegistration::registerImages()
 			ref->clipRange(ch, rMin[ch], rMax[ch]);
 	}
 
+	std::cout << "MismatchError->" << ImageMatchError << ", MinimumTime->" << MinimumTime << std::endl;
+
 	delete[] rMin;
 	delete[] rMax;
 }

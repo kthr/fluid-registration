@@ -8,6 +8,8 @@
 #ifndef FLUIDCURVATUREREGISTRATION_H_
 #define FLUIDCURVATUREREGISTRATION_H_
 
+#include <iostream>
+
 #include "../fourier_transform/Fourier.hpp"
 #include "../fourier_transform/InverseFourier.hpp"
 #include "../fourier_transform/CosFourier.hpp"
