@@ -29,10 +29,17 @@ int main(int argc, char *argv[])
 	bool verbose = 0;
 
 	cimg::exception_mode(0);
-	while ((option = getopt(argc, argv, "f:hm:p:r:s:t:v")) != EOF)
+	while ((option = getopt(argc, argv, "f:hm:i:p:r:s:t:v")) != EOF)
 	{
 		switch (option)
 		{
+			case 'i':
+				if ((dt_start = atof(optarg)) == 0.)
+				{
+					fprintf(stderr, "Invalid or missing argument for option -%c.\n", optopt);
+					return 1;
+				}
+				break;
 			case 'f':
 				if (optarg != NULL)
 				{
@@ -45,16 +52,18 @@ int main(int argc, char *argv[])
 				}
 				break;
 			case 'h':
-				#ifdef REVISION
-					cout << "Revision: " << REVISION << "\n";
-				#else
-					cout << "Revision: Unknown" << "\n";
-				#endif
+#ifdef REVISION
+				cout << "Revision: " << REVISION << "\n";
+#else
+				cout << "Revision: Unknown" << "\n";
+#endif
 				cout << "Usage: fluidReg [OPTIONS]... templateImage sampleImage\n";
-				cout << "Example: fluidReg -t 64 -m 0.00001 -s 200 -f flow.dat -p pattern.png template.png sample.png\n\n";
+				cout
+						<< "Example: fluidReg -t 64 -m 0.00001 -s 200 -f flow.dat -p pattern.png template.png sample.png\n\n";
 				cout << "Registration parameters:\n";
 				cout << "\t -f file \t the file where to save the computed flow field\n";
 				cout << "\t -h \t\t prints the help message\n";
+				cout << "\t -i NUM \t specifies the step size\n";
 				cout << "\t -m NUM \t specifies mismatch error for the two images (default=0.0005)\n";
 				cout << "\t -p file \t the file where to save the displaced sample or reference pattern\n";
 				cout << "\t -r file \t the reference image\n";
@@ -140,20 +149,19 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "Failed to open sample image '%s'.\n", argv[argc - 1]);
 		return 1;
 	}
-	std::cout << "Time: " << t_end << ", MismatchError: " << mismatch << ", SmoothWeight: " << alpha << "\n";
+	std::cout << "Time: " << t_end << ", MismatchError: " << mismatch << ", SmoothWeight: " << alpha
+			<< ", IterationStepSize: " << dt_start << "\n";
 
-	/*
-	 *templateImage /= templateImage->max();
-	 *sampleImage /= sampleImage->max();
-	 */
+	*templateImage /= templateImage->max();
+	*sampleImage /= sampleImage->max();
 
 	if (referenceImage)
 	{
 		reg = new FluidCurvatureRegistration(method, templateImage->width(), templateImage->height(),
 				templateImage->data(), (long int) templateImage->size(), sampleImage->data(),
 				(long int) sampleImage->size(), t_end, dt_start, alpha, viscosity, localDamping, mu, lambda,
-				vortexWeight, localError, mismatch, verbose, NULL, referenceImage->spectrum(),
-				referenceImage->data(), (long int) referenceImage->size());
+				vortexWeight, localError, mismatch, verbose, NULL, referenceImage->spectrum(), referenceImage->data(),
+				(long int) referenceImage->size());
 		reg->registerImages();
 	}
 	else

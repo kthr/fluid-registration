@@ -5,8 +5,6 @@
  *      Author: Konstantin Thierbach
  */
 
-#include <stdio.h>
-#include <math.h>
 #include "tbb/tbb.h"
 //#include "../registration/FluidCurvatureRegistration.hpp"
 

@@ -4,7 +4,7 @@
  *  Created on: Jul 11, 2012
  *      Author: kthierbach
  */
-
+#include <math.h>
 #include "RKV43.hpp"
 
 RKV43::RKV43(FluidCurvatureRegistration *fr) : fr(fr)
@@ -201,10 +201,9 @@ int RKV43::RKVMethod43(double x0, double xe, double h, double y[], int n, void (
 	ddx = fabs(xe - x0);
 	int_length = (double) 1.0 / (xe - x0);
 	k1 = new double[n];
-	k2 = new double[n];
+	k2 = k5 = new double[n];
 	k3 = new double[n];
 	k4 = new double[n];
-	k5 = k2;
 	yy = new double[n];
 	ynew = new double[n];
 	hnew = h;
