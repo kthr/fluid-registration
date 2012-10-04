@@ -8,6 +8,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <unistd.h>
+#include <getopt.h>
 #include "fluidReg.hpp"
 #include "registration/FluidCurvatureRegistration.hpp"
 #include "../lib/CImg-1.5.0/CImg.h"
@@ -23,115 +24,245 @@ int main(int argc, char *argv[])
 			viscosity = 1., localDamping = 1., vortexWeight = 0., mu = 1., //LameMu
 			lambda = 0.25, //LameLambda
 			localError = .5, mismatch = 0.0005; //MismatchError
-	int method = 7; //boundary
-	int option;
+	string boundaries[] = {"Periodic","ZeroDerivative","ZeroDisplacement"};
+	string methods[] = {"NavierLame","OverDampedCurvature","OverDampedDiffusion"};
+	int boundary = 0;
+	int method = 6;
+	int option, option_index;
 	char *flowFile = NULL, *patternFile = NULL;
-	bool verbose = 0;
+	int verbose = 0;
+
+	struct option long_options[] =
+	{
+		{ "boundary-condition", required_argument, NULL, '1' },
+		{ "flow-file", required_argument, NULL, '2' },
+		{ "method", required_argument, NULL, '3' },
+		{ "pattern-file", required_argument, NULL, '4' },
+		{ "reference-image", required_argument, NULL, '5' },
+		{ "verbose", no_argument, &verbose, 1 },
+		{ 0, 0, 0, 0 }
+	};
 
 	cimg::exception_mode(0);
-	while ((option = getopt(argc, argv, "f:hm:i:p:r:s:t:v")) != EOF)
+
+	while (1)
 	{
+
+		option = getopt_long(argc, argv, "d:e:hl:m:s:t:v:w:", long_options, &option_index);
+		if (option == -1)
+		{
+			break;
+		}
 		switch (option)
 		{
-			case 'i':
-				if ((dt_start = atof(optarg)) == 0.)
+			case 0: //flag option
+				/*option sets a flag*/
+				break;
+			case '1': //boundary condition
+				if (optarg != NULL)
 				{
-					fprintf(stderr, "Invalid or missing argument for option -%c.\n", optopt);
-					return 1;
+					boundary = -1;
+					for (int i = 0; i < 3; ++i)
+					{
+						if (boundaries[i].compare(optarg) == 0)
+						{
+							switch (i)
+							{
+								case 0: //Periodic
+									boundary = 0;
+									break;
+								case 1: //ZeroDerivative
+									boundary = 1;
+									break;
+								case 2: //ZeroDisplacement
+									boundary = 2;
+									break;
+							}
+						}
+					}
+					if (boundary == -1)
+					{
+						fprintf(stderr,
+								"Invalid argument for option -%c. Possible options are 'NavierLame', 'OverDampedCurvature' and 'OverDampedDiffusion'. Continuing with default.\n",
+								*(long_options[option_index].name));
+						boundary = 0;
+					}
+				}
+				else
+				{
+					fprintf(stderr, "Missing argument for option -%c.\n", *(long_options[option_index].name));
+					return EXIT_FAILURE;
 				}
 				break;
-			case 'f':
+			case '2': //flow file
 				if (optarg != NULL)
 				{
 					flowFile = optarg;
 				}
 				else
 				{
-					fprintf(stderr, "Invalid or missing argument for option -%c.\n", optopt);
-					return 1;
+					fprintf(stderr, "Missing argument for option -%c.\n", optopt);
+					return EXIT_FAILURE;
 				}
 				break;
-			case 'h':
-#ifdef REVISION
-				cout << "Revision: " << REVISION << "\n";
-#else
-				cout << "Revision: Unknown" << "\n";
-#endif
-				cout << "Usage: fluidReg [OPTIONS]... templateImage sampleImage\n";
-				cout
-						<< "Example: fluidReg -t 64 -m 0.00001 -s 200 -f flow.dat -p pattern.png template.png sample.png\n\n";
-				cout << "Registration parameters:\n";
-				cout << "\t -f file \t the file where to save the computed flow field\n";
-				cout << "\t -h \t\t prints the help message\n";
-				cout << "\t -i NUM \t specifies the step size\n";
-				cout << "\t -m NUM \t specifies mismatch error for the two images (default=0.0005)\n";
-				cout << "\t -p file \t the file where to save the displaced sample or reference pattern\n";
-				cout << "\t -r file \t the reference image\n";
-				cout << "\t -s NUM \t specifies the smooth weight which controls the viscosity (default=2.)\n";
-				cout << "\t -t NUM \t specifies the final time of the iteration process (default=64.)\n";
-				cout << "\t -v \t\t turns on verbose output (transformed sample image is shown)\n";
-				return 0;
-			case 'm':
-				if ((mismatch = atof(optarg)) == 0.)
+			case '3': //method
+				if (optarg != NULL)
 				{
-					fprintf(stderr, "Invalid or missing argument for option -%c.\n", optopt);
-					return 1;
+					method = -1;
+					for(int i=0; i<3; ++i)
+					{
+						if(methods[i].compare(optarg) == 0)
+						{
+							switch(i)
+							{
+								case 0: //NavierLame
+									method = 6;
+									break;
+								case 1: //OverDampedCurvature
+									method = 7;
+									break;
+								case 2: //OverDampedDiffusion
+									method = 10;
+									break;
+							}
+						}
+					}
+					if(method == -1)
+					{
+						fprintf(stderr, "Invalid argument for option -%c. Possible options are 'NavierLame', 'OverDampedCurvature' and 'OverDampedDiffusion'. Continuing with default.\n", *(long_options[option_index].name));
+						method = 6;
+					}
+				}
+				else
+				{
+					fprintf(stderr, "Missing argument for option -%c.\n", *(long_options[option_index].name));
+					return EXIT_FAILURE;
 				}
 				break;
-			case 'p':
+			case '4': //pattern file
 				if (optarg != NULL)
 				{
 					patternFile = optarg;
 				}
 				else
 				{
-					fprintf(stderr, "Invalid or missing argument for option -%c.\n", optopt);
-					return 1;
+					fprintf(stderr, "Invalid or missing argument for option -%c.\n", *(long_options[option_index].name));
+					return EXIT_FAILURE;
 				}
 				break;
-			case 'r':
+			case '5': //reference image
 				try
 				{
 					referenceImage = new CImg<double>(optarg);
-				} catch (CImgException &e)
+				}
+				catch (CImgException &e)
 				{
 					fprintf(stderr, "Failed to open reference image, continuing without a reference image.\n");
+					return EXIT_FAILURE;
 				}
 				break;
-			case 's':
+			case 'd': //local damping
+				if ((localDamping = atof(optarg)) == 0.)
+				{
+					fprintf(stderr, "Invalid or missing argument for option -%c.\n", option);
+					return EXIT_FAILURE;
+				}
+				break;
+			case 'e': //mismatch error
+				if ((mismatch = atof(optarg)) == 0.)
+				{
+					fprintf(stderr, "Invalid or missing argument for option -%c.\n", option);
+					return EXIT_FAILURE;
+				}
+				break;
+			case 'h': //help
+#ifdef REVISION
+				cout << "Revision: " << REVISION << endl;
+#else
+				cout << "Revision: Unknown" << endl;
+#endif
+				cout << "Usage: fluidReg [OPTIONS]... templateImage sampleImage" << endl;
+				cout
+						<< "Example: fluidReg -t 64 -e 0.00001 -s 200 --flow-file flow.dat --pattern-file pattern.png template.png sample.png\n\n";
+				cout << "Registration parameters:" << endl;
+				cout << "\t -d NUM \t local damping parameter (default=1.)" << endl;
+				cout << "\t -e NUM \t mismatch error for the two images (default=0.0005)" << endl;
+				cout << "\t -h \t\t prints the help message" << endl;
+				cout << "\t -l NUM \t lambda parameter (default=.25)" << endl;
+				cout << "\t -m NUM \t lame mu parameter (default=1.)" << endl;
+				cout << "\t -s NUM \t smooth weight parameter which controls the viscosity (default=2.)" << endl;
+				cout << "\t -t NUM \t final time of the iteration process (default=64.)" << endl;
+				cout << "\t -v NUM \t viscosity parameter (default=1.)" << endl;
+				cout << "\t -w NUM \t vortex weight parameter (default=0.)" << endl;
+				cout << "\t --boundary-condition CONDITION \t the boundary condition can be 'Periodic', 'ZeroDerivative' or 'ZeroDisplacement' (default=Periodic)" << endl;
+				cout << "\t --flow-file FILE \t the file where to save the computed flow field" << endl;
+				cout << "\t --method METHOD \t the method used for registration (default=NavierLame). Values for METHOD are:" << endl;
+				cout << "\t\t NavierLame \t\t with parameters lame mu (-m) and lambda (-l)" << endl;
+				cout << "\t\t OverDampedCurvature \t with parameters smooth weight (-s) and ?" << endl;
+				cout << "\t\t OverDampedDiffusion \t with parameters smooth weight (-s) and ?" << endl;
+				cout << "\t --pattern-file FILE \t the file where to save the displaced sample or reference image"
+						<< endl;
+				cout << "\t --reference-image FILE  the location of the reference image" << endl;
+				cout << "\t --verbose \t\t turns on verbose output (transformed sample image is shown)" << endl;
+				return EXIT_SUCCESS;
+			case 'l': //lambda
+				if ((lambda = atof(optarg)) == 0.)
+				{
+					fprintf(stderr, "Invalid or missing argument for option -%c.\n", option);
+					return EXIT_FAILURE;
+				}
+				break;
+			case 'm': //lame mu
+				if ((mu = atof(optarg)) == 0.)
+				{
+					fprintf(stderr, "Invalid or missing argument for option -%c.\n", option);
+					return EXIT_FAILURE;
+				}
+				break;
+			case 's': //smooth weight
 				if ((alpha = atof(optarg)) == 0.)
 				{
-					fprintf(stderr, "Invalid or missing argument for option -%c.\n", optopt);
-					return 1;
+					fprintf(stderr, "Invalid or missing argument for option -%c.\n", option);
+					return EXIT_FAILURE;
 				}
 				break;
-			case 't':
+			case 't': // max time
 				if ((t_end = atof(optarg)) == 0.)
 				{
-					fprintf(stderr, "Invalid or missing argument for option -%c.\n", optopt);
-					return 1;
+					fprintf(stderr, "Invalid or missing argument for option -%c.\n", option);
+					return EXIT_FAILURE;
 				}
 				break;
-			case 'v':
-				verbose = 1;
+			case 'v': //viscosity
+				if ((viscosity = atof(optarg)) == 0.)
+				{
+					fprintf(stderr, "Invalid or missing argument for option -%c.\n", option);
+					return EXIT_FAILURE;
+				}
+				break;
+			case 'w': //vortex weight
+				if ((vortexWeight = atof(optarg)) == 0.)
+				{
+					fprintf(stderr, "Invalid or missing argument for option -%c.\n", option);
+					return EXIT_FAILURE;
+				}
 				break;
 			case '?':
-				if (optopt == 't' || optopt == 'm' || optopt == 's')
-					fprintf(stderr, "Option -%c requires an argument.\n", optopt);
-				else if (isprint(optopt))
-					fprintf(stderr, "Unknown option `-%c'.\n", optopt);
-				else
-					fprintf(stderr, "Unknown option character `\\x%x'.\n", optopt);
-				return 1;
+				/* getopt_long already printed an error message. */
+				break;
 			default:
 				abort();
 		}
+	}
+	if(method != 6)
+	{
+		method += boundary;
 	}
 	if (argc < 3)
 	{
 		fprintf(stderr, "Usage: fluidReg [OPTIONS]... templateImage sampleImage\n");
 		fprintf(stderr, "Try `fluidReg -h' for more information.\n");
-		return 1;
+		return EXIT_FAILURE;
 	}
 	try
 	{
@@ -139,7 +270,7 @@ int main(int argc, char *argv[])
 	} catch (CImgException &e)
 	{
 		fprintf(stderr, "Failed to open template image '%s'.\n", argv[argc - 2]);
-		return 1;
+		return EXIT_FAILURE;
 	}
 	try
 	{
@@ -147,10 +278,23 @@ int main(int argc, char *argv[])
 	} catch (CImgException &e)
 	{
 		fprintf(stderr, "Failed to open sample image '%s'.\n", argv[argc - 1]);
-		return 1;
+		return EXIT_FAILURE;
 	}
-	std::cout << "Time: " << t_end << ", MismatchError: " << mismatch << ", SmoothWeight: " << alpha
-			<< ", IterationStepSize: " << dt_start << "\n";
+	switch(method-boundary)
+	{
+		case 6://NavierLame
+			cout << "Method: NavierLame" << ", BoundaryCondition: " << boundaries[boundary] <<", Time: " << t_end << ", MismatchError: " << mismatch << endl;
+			cout << "LameMu: " << mu << ", Lambda: " << lambda << endl;
+			break;
+		case 7://OverdampedCurvature
+			cout << "Method: OverDampedCurvature" << ", BoundaryCondition: " << boundaries[boundary] <<", Time: " << t_end << ", MismatchError: " << mismatch << endl;
+			cout << "SmoothWeight: " << alpha << endl;
+			break;
+		case 10://OverdampedDiffusion
+			cout << "Method: OverDampedDiffusion" << ", BoundaryCondition: " << boundaries[boundary] <<", Time: " << t_end << ", MismatchError: " << mismatch << endl;
+			cout << "SmoothWeight: " << alpha << ", LocalDamping: " << localDamping << endl;
+			break;
+	}
 
 	*templateImage /= templateImage->max();
 	*sampleImage /= sampleImage->max();
