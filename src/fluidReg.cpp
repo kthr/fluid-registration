@@ -185,14 +185,14 @@ int main(int argc, char *argv[])
 				cout
 						<< "Example: fluidReg -t 64 -e 0.00001 -s 200 --flow-file flow.dat --pattern-file pattern.png template.png sample.png\n\n";
 				cout << "Registration parameters:" << endl;
-				cout << "\t -d NUM \t local damping parameter (default=1.)" << endl;
+				//cout << "\t -d NUM \t local damping parameter (default=1.)" << endl;
 				cout << "\t -e NUM \t mismatch error for the two images (default=0.0005)" << endl;
 				cout << "\t -h \t\t prints the help message" << endl;
 				cout << "\t -l NUM \t lambda parameter (default=.25)" << endl;
 				cout << "\t -m NUM \t lame mu parameter (default=1.)" << endl;
 				cout << "\t -s NUM \t smooth weight parameter which controls the viscosity (default=2.)" << endl;
 				cout << "\t -t NUM \t final time of the iteration process (default=64.)" << endl;
-				cout << "\t -v NUM \t viscosity parameter (default=1.)" << endl;
+				//cout << "\t -v NUM \t viscosity parameter (default=1.)" << endl;
 				cout << "\t -w NUM \t vortex weight parameter (default=0.)" << endl;
 				cout << "\t --boundary-condition CONDITION \t the boundary condition can be 'Periodic', 'ZeroDerivative' or 'ZeroDisplacement' (default=Periodic)" << endl;
 				cout << "\t --flow-file FILE \t the file where to save the computed flow field" << endl;
@@ -288,11 +288,11 @@ int main(int argc, char *argv[])
 			break;
 		case 7://OverdampedCurvature
 			cout << "Method: OverDampedCurvature" << ", BoundaryCondition: " << boundaries[boundary] <<", Time: " << t_end << ", MismatchError: " << mismatch << endl;
-			cout << "SmoothWeight: " << alpha << endl;
+			cout << "SmoothWeight: " << alpha << ", VortexWeight: " << vortexWeight << endl;
 			break;
 		case 10://OverdampedDiffusion
 			cout << "Method: OverDampedDiffusion" << ", BoundaryCondition: " << boundaries[boundary] <<", Time: " << t_end << ", MismatchError: " << mismatch << endl;
-			cout << "SmoothWeight: " << alpha << ", LocalDamping: " << localDamping << endl;
+			cout << "SmoothWeight: " << alpha << ", VortexWeight: " << vortexWeight << endl;
 			break;
 	}
 
