@@ -198,8 +198,8 @@ int main(int argc, char *argv[])
 				cout << "\t --flow-file FILE \t the file where to save the computed flow field" << endl;
 				cout << "\t --method METHOD \t the method used for registration (default=NavierLame). Values for METHOD are:" << endl;
 				cout << "\t\t NavierLame \t\t with parameters lame mu (-m) and lambda (-l)" << endl;
-				cout << "\t\t OverDampedCurvature \t with parameters smooth weight (-s) and ?" << endl;
-				cout << "\t\t OverDampedDiffusion \t with parameters smooth weight (-s) and ?" << endl;
+				cout << "\t\t OverDampedCurvature \t with parameters smooth weight (-s) and vortex weight (-w)" << endl;
+				cout << "\t\t OverDampedDiffusion \t with parameters smooth weight (-s) and vortex weight (-w)" << endl;
 				cout << "\t --pattern-file FILE \t the file where to save the displaced sample or reference image"
 						<< endl;
 				cout << "\t --reference-image FILE  the location of the reference image" << endl;
