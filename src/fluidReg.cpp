@@ -199,8 +199,7 @@ int main(int argc, char *argv[])
 				cout << "\t\t NavierLame \t\t with parameters lame mu (-m) and lambda (-l)" << endl;
 				cout << "\t\t OverDampedCurvature \t with parameters smooth weight (-s) and vortex weight (-w)" << endl;
 				cout << "\t\t OverDampedDiffusion \t with parameters smooth weight (-s) and vortex weight (-w)" << endl;
-				cout << "\t --pattern-file FILE \t the file where to save the displaced sample or reference image"
-						<< endl;
+				cout << "\t --pattern-file FILE \t the file where to save the displaced sample or reference image" << endl;
 				cout << "\t --reference-image FILE  the location of the reference image" << endl;
 				cout << "\t --verbose \t\t turns on verbose output (transformed sample image is shown)" << endl;
 				return EXIT_SUCCESS;
@@ -300,7 +299,7 @@ int main(int argc, char *argv[])
 
 	if (referenceImage)
 	{
-		reg = new FluidCurvatureRegistration(method, templateImage->width(), templateImage->height(),
+		reg = new FluidCurvatureRegistration(method, templateImage->height(), templateImage->width(),
 				templateImage->data(), (long int) templateImage->size(), sampleImage->data(),
 				(long int) sampleImage->size(), t_end, dt_start, alpha, viscosity, localDamping, mu, lambda,
 				vortexWeight, localError, mismatch, verbose, NULL, referenceImage->spectrum(), referenceImage->data(),
@@ -309,7 +308,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		reg = new FluidCurvatureRegistration(method, templateImage->width(), templateImage->height(),
+		reg = new FluidCurvatureRegistration(method, templateImage->height(), templateImage->width(),
 				templateImage->data(), (long int) templateImage->size(), sampleImage->data(),
 				(long int) sampleImage->size(), t_end, dt_start, alpha, viscosity, localDamping, mu, lambda,
 				vortexWeight, localError, mismatch, verbose, NULL, 1, NULL, 0);
@@ -318,11 +317,11 @@ int main(int argc, char *argv[])
 	//check for reference image
 	if (referenceImage != NULL)
 	{
-		patternImage = new CImg<double>(reg->getReference()->bm, reg->getReference()->ny, reg->getReference()->nx);
+		patternImage = new CImg<double>(reg->getReference()->bm, reg->getReference()->nx, reg->getReference()->ny);
 	}
 	else
 	{
-		patternImage = new CImg<double>(reg->getSample()->bm, reg->getSample()->ny, reg->getSample()->nx);
+		patternImage = new CImg<double>(reg->getSample()->bm, reg->getSample()->nx, reg->getSample()->ny);
 	}
 	if (patternFile != NULL)
 	{
@@ -337,7 +336,8 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		patternImage->display("result");
+		if(verbose)
+			patternImage->display("result");
 	}
 
 	if (flowFile != NULL)

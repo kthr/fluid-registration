@@ -1533,7 +1533,7 @@ int FluidCurvatureRegistration::PrintFluidProgress1(double t, double h, double*u
 
 	if(returnType)
 	{
-		const cimg_library::CImg<double> img(__wraped->bm, __wraped->ny, __wraped->nx);
+		const cimg_library::CImg<double> img(__wraped->bm, __wraped->nx, __wraped->ny);
 		img.display(display.wait(100));
 	}
 
