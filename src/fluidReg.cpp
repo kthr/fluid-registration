@@ -83,14 +83,14 @@ int main(int argc, char *argv[])
 					if (boundary == -1)
 					{
 						fprintf(stderr,
-								"Invalid argument for option -%c. Possible options are 'NavierLame', 'OverDampedCurvature' and 'OverDampedDiffusion'. Continuing with default.\n",
+								"Invalid argument for option --%s. Possible options are 'NavierLame', 'OverDampedCurvature' and 'OverDampedDiffusion'. Continuing with default.\n",
 								*(long_options[option_index].name));
 						boundary = 0;
 					}
 				}
 				else
 				{
-					fprintf(stderr, "Missing argument for option -%c.\n", *(long_options[option_index].name));
+					fprintf(stderr, "Missing argument for option --%s.\n", *(long_options[option_index].name));
 					return EXIT_FAILURE;
 				}
 				break;
@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
 				}
 				else
 				{
-					fprintf(stderr, "Missing argument for option -%c.\n", optopt);
+					fprintf(stderr, "Missing argument for option --%s.\n", *(long_options[option_index].name));
 					return EXIT_FAILURE;
 				}
 				break;
@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
 					}
 					if(method == -1)
 					{
-						fprintf(stderr, "Invalid argument for option -%c. Possible options are 'NavierLame', 'OverDampedCurvature' and 'OverDampedDiffusion'. Continuing with default.\n", *(long_options[option_index].name));
+						fprintf(stderr, "Invalid argument for option --%s. Possible options are 'NavierLame', 'OverDampedCurvature' and 'OverDampedDiffusion'. Continuing with default.\n", *(long_options[option_index].name));
 						method = 6;
 					}
 				}
@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
 				}
 				else
 				{
-					fprintf(stderr, "Invalid or missing argument for option -%c.\n", *(long_options[option_index].name));
+					fprintf(stderr, "Invalid or missing argument for option --%s.\n", *(long_options[option_index].name));
 					return EXIT_FAILURE;
 				}
 				break;
@@ -158,7 +158,6 @@ int main(int argc, char *argv[])
 				catch (CImgException &e)
 				{
 					fprintf(stderr, "Failed to open reference image, continuing without a reference image.\n");
-					return EXIT_FAILURE;
 				}
 				break;
 			case 'd': //local damping
@@ -316,25 +315,29 @@ int main(int argc, char *argv[])
 				vortexWeight, localError, mismatch, verbose, NULL, 1, NULL, 0);
 		reg->registerImages();
 	}
-
+	//check for reference image
 	if (referenceImage != NULL)
 	{
 		patternImage = new CImg<double>(reg->getReference()->bm, reg->getReference()->ny, reg->getReference()->nx);
-		if (patternFile != NULL)
+	}
+	else
+	{
+		patternImage = new CImg<double>(reg->getSample()->bm, reg->getSample()->ny, reg->getSample()->nx);
+	}
+	if (patternFile != NULL)
+	{
+		try
 		{
-			try
-			{
-				patternImage->save(patternFile);
-			} catch (CImgException &e)
-			{
-				fprintf(stderr, "Failed to save reference image at '%s'.\n", patternFile);
-				return 1;
-			}
-		}
-		else
+			patternImage->save(patternFile);
+		} catch (CImgException &e)
 		{
-			patternImage->display("reference image");
+			fprintf(stderr, "Failed to save reference image at '%s'.\n", patternFile);
+			return 1;
 		}
+	}
+	else
+	{
+		patternImage->display("result");
 	}
 
 	if (flowFile != NULL)

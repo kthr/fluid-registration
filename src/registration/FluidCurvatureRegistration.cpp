@@ -18,10 +18,11 @@ FluidCurvatureRegistration::FluidCurvatureRegistration(int boundary, int ny, int
 	templateImage = new Image<double>(tdata, nx, ny, 1);
 	sampleImage = new Image<double>(sdata, nx, ny, 1);
 	__wraped = new Image<double>(nx, ny, 1);
-	if (rlen > 0)
+	if (refpat != NULL)
 	{
 		ref = new Image<double>(refpat, nx, ny, refchannels);
 	}
+	else
 	{
 		ref = NULL;
 	}
@@ -1592,4 +1593,8 @@ VectorArray2D* FluidCurvatureRegistration::getFlowField() const
 Image<double>* FluidCurvatureRegistration::getReference() const
 {
 	return ref;
+}
+Image<double>* FluidCurvatureRegistration::getSample() const
+{
+	return sampleImage;
 }

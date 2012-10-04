@@ -45,6 +45,7 @@ class FluidCurvatureRegistration
 		void registerImages();
 		VectorArray2D* getFlowField() const;
 		Image<double>* getReference() const;
+		Image<double>* getSample() const;
 
 	private:
 		Image<double> *templateImage, *sampleImage, *__wraped, *ref;
