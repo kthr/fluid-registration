@@ -84,13 +84,13 @@ int main(int argc, char *argv[])
 					{
 						fprintf(stderr,
 								"Invalid argument for option --%s. Possible options are 'NavierLame', 'OverDampedCurvature' and 'OverDampedDiffusion'. Continuing with default.\n",
-								*(long_options[option_index].name));
+								long_options[option_index].name);
 						boundary = 0;
 					}
 				}
 				else
 				{
-					fprintf(stderr, "Missing argument for option --%s.\n", *(long_options[option_index].name));
+					fprintf(stderr, "Missing argument for option --%s.\n", long_options[option_index].name);
 					return EXIT_FAILURE;
 				}
 				break;
@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
 				}
 				else
 				{
-					fprintf(stderr, "Missing argument for option --%s.\n", *(long_options[option_index].name));
+					fprintf(stderr, "Missing argument for option --%s.\n", long_options[option_index].name);
 					return EXIT_FAILURE;
 				}
 				break;
@@ -129,13 +129,13 @@ int main(int argc, char *argv[])
 					}
 					if(method == -1)
 					{
-						fprintf(stderr, "Invalid argument for option --%s. Possible options are 'NavierLame', 'OverDampedCurvature' and 'OverDampedDiffusion'. Continuing with default.\n", *(long_options[option_index].name));
+						fprintf(stderr, "Invalid argument for option --%s. Possible options are 'NavierLame', 'OverDampedCurvature' and 'OverDampedDiffusion'. Continuing with default.\n", long_options[option_index].name);
 						method = 6;
 					}
 				}
 				else
 				{
-					fprintf(stderr, "Missing argument for option -%c.\n", *(long_options[option_index].name));
+					fprintf(stderr, "Missing argument for option -%c.\n", long_options[option_index].name);
 					return EXIT_FAILURE;
 				}
 				break;
@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
 				}
 				else
 				{
-					fprintf(stderr, "Invalid or missing argument for option --%s.\n", *(long_options[option_index].name));
+					fprintf(stderr, "Invalid or missing argument for option --%s.\n", long_options[option_index].name);
 					return EXIT_FAILURE;
 				}
 				break;

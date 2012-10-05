@@ -2,7 +2,7 @@ SRC_DIR=src
 BUILD_DIR=build
 
 CXX=g++
-CXXFLAGS=-g -Wall -I/opt/intel/tbb/include -Ilib -Ilib/CImg-1.5.0 -Isrc/filter -Isrc/fourier_transform -Isrc/registration -Isrc/segmentation -Isrc/templates -Isrc/utilities
+CXXFLAGS=-parallel -O3 -fopenmp -Wall -I/opt/intel/tbb/include -Ilib -Ilib/CImg-1.5.0 -Isrc/filter -Isrc/fourier_transform -Isrc/registration -Isrc/segmentation -Isrc/templates -Isrc/utilities
 LFLAGS=-L/opt/intel/composer_xe_2011_sp1/lib/ -lirc -limf -liomp5 -L/opt/intel/tbb/lib -ltbb -L/usr/X11R6/lib -lpthread -lX11 -Llib/MacOSX-x86-64 -lfftw3 -lstdc++
 
 OBJECTS=${BUILD_DIR}/fluidReg.o ${BUILD_DIR}/FluidCurvatureRegistration.o ${BUILD_DIR}/Fourier.o \
