@@ -6,13 +6,15 @@ import sys
 PATTERN=('.png','.jpg','.tif')
 INDEX_COUNT='4'
 
+
+
+#binary
+pathToFluidReg='./fluidReg'
+
 method='NavierLame'
 boundary="Periodic"
 timeEnd='32'
 mismatchError='0.00005'
-
-#binary
-pathToFluidReg='./fluidReg'
 
 #options for NavierLame
 lamemu='1'
