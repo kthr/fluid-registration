@@ -161,11 +161,12 @@ int main(int argc, char *argv[])
 				}
 				break;
 			case 'd': //local damping
-				if ((localDamping = atof(optarg)) == 0.)
+				if (optarg == NULL)
 				{
 					fprintf(stderr, "Invalid or missing argument for option -%c.\n", option);
 					return EXIT_FAILURE;
 				}
+				localDamping = atof(optarg);
 				break;
 			case 'e': //mismatch error
 				if ((mismatch = atof(optarg)) == 0.)
@@ -204,46 +205,52 @@ int main(int argc, char *argv[])
 				cout << "\t --verbose \t\t turns on verbose output (transformed sample image is shown)" << endl;
 				return EXIT_SUCCESS;
 			case 'l': //lambda
-				if ((lambda = atof(optarg)) == 0.)
+				if (optarg == NULL)
 				{
-					fprintf(stderr, "Invalid or missing argument for option -%c.\n", option);
+					fprintf(stderr, "Missing argument for option -%c.\n", option);
 					return EXIT_FAILURE;
 				}
+				lambda = atof(optarg);
 				break;
 			case 'm': //lame mu
-				if ((mu = atof(optarg)) == 0.)
+				if (optarg == NULL)
 				{
-					fprintf(stderr, "Invalid or missing argument for option -%c.\n", option);
+					fprintf(stderr, "Missing argument for option -%c.\n", option);
 					return EXIT_FAILURE;
 				}
+				mu = atof(optarg);
 				break;
 			case 's': //smooth weight
-				if ((alpha = atof(optarg)) == 0.)
+				if (optarg == NULL)
 				{
-					fprintf(stderr, "Invalid or missing argument for option -%c.\n", option);
+					fprintf(stderr, "Missing argument for option -%c.\n", option);
 					return EXIT_FAILURE;
 				}
+				alpha = atof(optarg);
 				break;
 			case 't': // max time
-				if ((t_end = atof(optarg)) == 0.)
+				if (optarg == NULL)
 				{
-					fprintf(stderr, "Invalid or missing argument for option -%c.\n", option);
+					fprintf(stderr, "Missing argument for option -%c.\n", option);
 					return EXIT_FAILURE;
 				}
+				t_end = atof(optarg);
 				break;
 			case 'v': //viscosity
-				if ((viscosity = atof(optarg)) == 0.)
+				if (optarg == NULL)
 				{
-					fprintf(stderr, "Invalid or missing argument for option -%c.\n", option);
+					fprintf(stderr, "Missing argument for option -%c.\n", option);
 					return EXIT_FAILURE;
 				}
+				viscosity = atof(optarg);
 				break;
 			case 'w': //vortex weight
-				if ((vortexWeight = atof(optarg)) == 0.)
+				if (optarg == NULL)
 				{
-					fprintf(stderr, "Invalid or missing argument for option -%c.\n", option);
+					fprintf(stderr, "Missing argument for option -%c.\n", option);
 					return EXIT_FAILURE;
 				}
+				vortexWeight = atof(optarg);
 				break;
 			case '?':
 				/* getopt_long already printed an error message. */
