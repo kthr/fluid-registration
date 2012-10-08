@@ -41,7 +41,7 @@ def filenames(path,pattern):
 	return files
 
 def register(frame):
-	subprocess.call([pathToFluidReg, '-t ' + timeEnd,'-e ' + mismatchError,'-s ' + smoothWeight, '-w ' + vortexWeight, '-l ' + Lambda, '-m ' + lamemu, '--flow-file', os.path.join(flowPath,('flow%0' + INDEX_COUNT + 'i.dat') % (frame+1)), files[frame], files[frame-1]])
+	subprocess.call([pathToFluidReg, '--method', method,'-t ' + timeEnd,'-e ' + mismatchError,'-s ' + smoothWeight, '-w ' + vortexWeight, '-l ' + Lambda, '-m ' + lamemu, '--flow-file', os.path.join(flowPath,('flow%0' + INDEX_COUNT + 'i.dat') % (frame+1)), files[frame], files[frame-1]])
 
 def execute():
 	pool=Pool(parallelProcesses)
