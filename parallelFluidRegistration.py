@@ -33,7 +33,7 @@ parallelProcesses=2
 
 
 def filenames(path,pattern):
-	files=filter(lambda file: any(file.lower().endswith(x) for x in pattern),os.listdir(path))
+	files=filter(lambda file: any(file.lower().endswith(x) for x in pattern),sorted(os.listdir(path)))
 	files=map(lambda file: os.path.join(path,file),files)
 	print "Found " + str(len(files)) + " images."
 	if(len(files) == 0):
@@ -45,7 +45,7 @@ def register(frame):
 
 def execute():
 	pool=Pool(parallelProcesses)
-	pool.map(register,range(fromFrame-1,toFrame-1))
+	pool.map(register,range(fromFrame,toFrame-1))
 
 if(os.path.isfile(pathToFluidReg) == False):
 	print "Binary " + pathToFluidReg + " not found."
