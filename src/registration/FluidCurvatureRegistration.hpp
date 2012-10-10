@@ -10,6 +10,7 @@
 
 #include <iostream>
 
+#include "../filter/MedianFilter.hpp"
 #include "../fourier_transform/Fourier.hpp"
 #include "../fourier_transform/InverseFourier.hpp"
 #include "../fourier_transform/CosFourier.hpp"
