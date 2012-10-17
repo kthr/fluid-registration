@@ -1,0 +1,85 @@
+#!/usr/bin/env python2.7
+
+from multiprocessing import Pool
+import subprocess
+import os
+import sys
+import argparse
+
+parser=argparse.ArgumentParser(description='Parallel computation of fluid registrations for the given images.') 
+parser.add_argument('--method', default='NavierLame', type=str, help='The method used for registration (default=NavierLame). Allowed values for METHOD are NavierLame, OverDampedCurvature and OverDampedDiffusion.')
+parser.add_argument('--boundary-condition', default='Periodic', type=str, help='The boundary condition (default=Periodic). Allowed values for BOUNDARY_CONDITION are Periodic, ZeroDerivative or ZeroDisplacement.')
+parser.add_argument('-t', metavar='NUM', default=64., type=float, help='Final time of the iteration process (default=64.).')
+parser.add_argument('-e', metavar='NUM', default=0.0005, type=float, help='Mismatch error for the two images (default=0.0005).')
+parser.add_argument('-m', metavar='NUM', default=1., type=float, help='Lame mu parameter (default=1.) for the NavierLame method.');
+parser.add_argument('-l', metavar='NUM', default=.25, type=float, help='Lambda parameter (default=.25) for the NavierLame method.');
+parser.add_argument('-s', metavar='NUM', default=2, type=float, help='Lame mu parameter (default=2) for both OverDampedCurvature and OverDampedDiffusion method.');
+parser.add_argument('-v', metavar='NUM', default=0, type=float, help='Lame mu parameter (default=0) for both OverDampedCurvature and OverDampedDiffusion method.');
+parser.add_argument('-r', metavar='NUM', default=[1,100000], type=int, nargs=2, help='Range of images that shall be registered (default=register all images).');
+parser.add_argument('-p', metavar='NUM', default=12, type=int, help='The number of parallel registrations computed at once (default=12).');
+parser.add_argument('image_directory', type=str)
+parser.add_argument('flow_directory', type=str)
+
+args=parser.parse_args()
+
+if(os.path.exists(args.image_directory) == False):
+	print "Image directory " + args.image_directory + " does not exist."
+	sys.exit(1)
+if(os.path.exists(args.flow_directory) == False):
+	print "Flow directory " + args.flow_directory + " does not exist."
+	sys.exit(1)
+
+PATTERN=('.png','.jpg','.tif')
+
+#binary
+pathToFluidReg=subprocess.Popen(['which','fluidReg'],stdout=subprocess.PIPE).stdout.read().strip()
+
+method=args.method
+boundary=args.boundary_condition
+timeEnd=str(args.t)
+mismatchError=str(args.e)
+
+#options for NavierLame
+lamemu=str(args.m)
+Lambda=str(args.l)
+
+#options for OverDampedCurvature and OverDampedDiffusion
+smoothWeight=str(args.s)
+vortexWeight=str(args.v)
+
+imagePath=args.image_directory
+flowPath=args.flow_directory
+fromFrame=args.r[0]
+toFrame=args.r[1]
+parallelProcesses=args.p
+
+def filenames(path,pattern):
+	files=filter(lambda file: any(file.lower().endswith(x) for x in pattern),sorted(os.listdir(path)))
+	files=map(lambda file: os.path.join(path,file),files)
+	print "Found " + str(len(files)) + " images."
+	if(len(files) == 0):
+		sys.exit(1)
+	return files
+
+def register(frame):
+	subprocess.call([pathToFluidReg, '--method', method,'-t ' + timeEnd,'-e ' + mismatchError,'-s ' + smoothWeight, '-w ' + vortexWeight, '-l ' + Lambda, '-m ' + lamemu, '--flow-file', os.path.join(flowPath,('flow%0' + str(INDEX_COUNT) + 'i.dat') % frame), files[frame], files[frame-1]],stdout=subprocess.PIPE)
+
+def execute():
+	pool=Pool(parallelProcesses)
+	pool.map(register,range(fromFrame,toFrame))
+
+if(fromFrame<1):
+	print 'Invalid range! First range parameter specifying the image to start from can not be smaller than 1.'
+	sys.exit(1)
+if(toFrame<=fromFrame):
+	print 'Invalid range! First range parameter has to be smaller than the second.'
+if(pathToFluidReg == ''):
+	print "Binary fluidReg not found."
+	sys.exit(1)
+
+files=filenames(imagePath,PATTERN);
+INDEX_COUNT=max(4,len(str(len(files))))
+if(len(files) < toFrame):
+	toFrame=len(files)
+
+execute()
