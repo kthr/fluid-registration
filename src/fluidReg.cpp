@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
 	int option, option_index;
 	char *flowFile = NULL, *patternFile = NULL;
 	int verbose = 0;
+	parameters param;
 
 	struct option long_options[] =
 	{
@@ -135,7 +136,7 @@ int main(int argc, char *argv[])
 				}
 				else
 				{
-					fprintf(stderr, "Missing argument for option -%c.\n", long_options[option_index].name);
+					fprintf(stderr, "Missing argument for option -%s.\n", long_options[option_index].name);
 					return EXIT_FAILURE;
 				}
 				break;
@@ -349,7 +350,16 @@ int main(int argc, char *argv[])
 
 	if (flowFile != NULL)
 	{
-		if (!reg->getFlowField()->save(flowFile))
+		param.end = t_end;
+		param.error = mismatch;
+		param.alpha = alpha;
+		param.vortex_weight = vortexWeight;
+		param.mu  = mu;
+		param.lamda = lambda;
+		param.boundary = boundaries[boundary];
+		param.method = methods[method];
+
+		if (!reg->getFlowField()->save(flowFile, &param))
 		{
 			fprintf(stderr, "Failed to save flow field at '%s'.\n", flowFile);
 			return 1;

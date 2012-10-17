@@ -9,6 +9,7 @@
 #define FLUIDCURVATUREREGISTRATION_H_
 
 #include <iostream>
+#include <stdlib.h>
 
 #include "../filter/MedianFilter.hpp"
 #include "../fourier_transform/Fourier.hpp"
@@ -31,6 +32,19 @@
 #define Re(c) (c)[0]
 #define Im(c) (c)[1]
 #define addr(i,j) ((i)+(nx)*(j))
+
+struct parameters{
+	double end;
+	double error;
+	double alpha;
+	double vortex_weight;
+	double mu;
+	double lamda;
+	std::string boundary;
+	std::string method;
+	double actual_error;
+	double actual_time;
+};
 
 class RKNystroemDSolve;
 

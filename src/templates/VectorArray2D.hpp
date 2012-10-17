@@ -17,6 +17,7 @@
 
 #define Address(i,j,nx,ny) ((i)+(nx)*(j))
 #define VectorArrayMagic 1447379762
+#define VectorArrayMagic2 1278906352
 
 class VectorArray2D
 {
@@ -53,6 +54,7 @@ public:
 	Vector2D laplace(int i, int j);
 	bool load(const char *fname);
 	bool save(const char *fname);
+	bool save(const char *fname, struct parameters *param);
 };
 
 

@@ -1216,27 +1216,50 @@ bool VectorArray2D::save(const char*fname)
 	return true;
 }
 
+bool VectorArray2D::save(const char* fname, struct parameters *param)
+{
+	FILE * f;
+	int magic = VectorArrayMagic2;
+	f = fopen(fname, "wb");
+	if (!f)
+		return false;
+	fwrite(&magic, sizeof(int), 1, f);
+	fwrite(&dx, sizeof(double), 1, f);
+	fwrite(&dy, sizeof(double), 1, f);
+	fwrite(&nx, sizeof(int), 1, f);
+	fwrite(&ny, sizeof(int), 1, f);
+	fwrite(vx, sizeof(double), 2 * nx * ny, f);
+	fclose(f);
+	return true;
+}
+
 bool VectorArray2D::load(const char*fname)
 {
 	FILE * f;
-	int type, magic;
+	int magic;
 	f = fopen(fname, "rb");
 	if (!f)
 		return false;
 	fread(&magic, sizeof(int), 1, f);
-	if (magic != VectorArrayMagic)
+	if (magic == VectorArrayMagic)
+	{
+		fread(&dx, sizeof(double), 1, f);
+		fread(&dy, sizeof(double), 1, f);
+		fread(&nx, sizeof(int), 1, f);
+		fread(&ny, sizeof(int), 1, f);
+		if (vx)
+			delete vx;
+		vx = new double[2 * nx * ny];
+		fread(vx, sizeof(double), 2 * nx * ny, f);
+		fclose(f);
+		return true;
+
+	}
+	if(magic == VectorArrayMagic2)
 	{
 		fclose(f);
-		return false;
+		return true;
 	}
-	fread(&dx, sizeof(double), 1, f);
-	fread(&dy, sizeof(double), 1, f);
-	fread(&nx, sizeof(int), 1, f);
-	fread(&ny, sizeof(int), 1, f);
-	if (vx)
-		delete vx;
-	vx = new double[2 * nx * ny];
-	fread(vx, sizeof(double), 2 * nx * ny, f);
 	fclose(f);
-	return true;
+	return false;
 }
