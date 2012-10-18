@@ -1228,6 +1228,16 @@ bool VectorArray2D::save(const char* fname, struct parameters *param)
 	fwrite(&dy, sizeof(double), 1, f);
 	fwrite(&nx, sizeof(int), 1, f);
 	fwrite(&ny, sizeof(int), 1, f);
+	fwrite(&param->end, sizeof(double), 1, f);
+	fwrite(&param->error, sizeof(double), 1, f);
+	fwrite(&param->alpha, sizeof(double), 1, f);
+	fwrite(&param->vortex_weight, sizeof(double), 1, f);
+	fwrite(&param->mu, sizeof(double), 1, f);
+	fwrite(&param->lambda, sizeof(double), 1, f);
+	fwrite(param->boundary.c_str(), sizeof(char), param->boundary.size()+1, f);
+	fwrite(param->method.c_str(), sizeof(char), param->method.size()+1, f);
+	fwrite(&param->actual_error, sizeof(double), 1, f);
+	fwrite(&param->actual_time, sizeof(double), 1, f);
 	fwrite(vx, sizeof(double), 2 * nx * ny, f);
 	fclose(f);
 	return true;

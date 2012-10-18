@@ -1598,3 +1598,11 @@ Image<double>* FluidCurvatureRegistration::getSample() const
 {
 	return sampleImage;
 }
+double FluidCurvatureRegistration::getMinimalTime() const
+{
+	return MinimumTime;
+}
+double FluidCurvatureRegistration::getMismatchError() const
+{
+	return ImageMatchError;
+}

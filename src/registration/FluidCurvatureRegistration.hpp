@@ -33,19 +33,6 @@
 #define Im(c) (c)[1]
 #define addr(i,j) ((i)+(nx)*(j))
 
-struct parameters{
-	double end;
-	double error;
-	double alpha;
-	double vortex_weight;
-	double mu;
-	double lamda;
-	std::string boundary;
-	std::string method;
-	double actual_error;
-	double actual_time;
-};
-
 class RKNystroemDSolve;
 
 class FluidCurvatureRegistration
@@ -61,6 +48,8 @@ class FluidCurvatureRegistration
 		VectorArray2D* getFlowField() const;
 		Image<double>* getReference() const;
 		Image<double>* getSample() const;
+		double getMinimalTime() const;
+		double getMismatchError() const;
 
 	private:
 		Image<double> *templateImage, *sampleImage, *__wraped, *ref;

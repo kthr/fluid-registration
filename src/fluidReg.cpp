@@ -11,6 +11,7 @@
 #include <getopt.h>
 #include "fluidReg.hpp"
 #include "registration/FluidCurvatureRegistration.hpp"
+#include "templates/Parameters.hpp"
 #include "../lib/CImg-1.5.0/CImg.h"
 
 using namespace cimg_library;
@@ -355,9 +356,22 @@ int main(int argc, char *argv[])
 		param.alpha = alpha;
 		param.vortex_weight = vortexWeight;
 		param.mu  = mu;
-		param.lamda = lambda;
+		param.lambda = lambda;
 		param.boundary = boundaries[boundary];
-		param.method = methods[method];
+		switch(method-boundary)
+		{
+			case 6://NavierLame
+				param.method = methods[0];
+				break;
+			case 7://OverdampedCurvature
+				param.method = methods[1];
+				break;
+			case 10://OverdampedDiffusion
+				param.method = methods[2];
+				break;
+		}
+		param.actual_error = reg->getMismatchError();
+		param.actual_time = reg->getMinimalTime();
 
 		if (!reg->getFlowField()->save(flowFile, &param))
 		{
