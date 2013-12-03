@@ -9,7 +9,7 @@
 #define INVERSECOSFOURIER_HPP_
 
 #include <math.h>
-#include "../../lib/fftw3.h"
+#include <fftw3.h>
 
 void InverseCosFourier(double*out, double*in, int nx, int ny);
 

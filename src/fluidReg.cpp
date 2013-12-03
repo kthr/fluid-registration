@@ -12,7 +12,7 @@
 #include "fluidReg.hpp"
 #include "registration/FluidCurvatureRegistration.hpp"
 #include "templates/Parameters.hpp"
-#include "../lib/CImg-1.5.0/CImg.h"
+#include "CImg.h"
 
 using namespace cimg_library;
 using namespace std;

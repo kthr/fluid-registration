@@ -10,23 +10,23 @@
 
 #include <iostream>
 #include <stdlib.h>
+#include <fftw3.h>
 
-#include "../filter/MedianFilter.hpp"
-#include "../fourier_transform/Fourier.hpp"
-#include "../fourier_transform/InverseFourier.hpp"
-#include "../fourier_transform/CosFourier.hpp"
-#include "../fourier_transform/InverseCosFourier.hpp"
-#include "../fourier_transform/SinFourier.hpp"
-#include "../fourier_transform/InverseSinFourier.hpp"
-#include "../templates/ImageTemplate.hpp"
-#include "../templates/VectorArray2D.hpp"
-#include "../templates/Vector2D.hpp"
-#include "../solver/RKNystroem.hpp"
-#include "../solver/RKV43.hpp"
-#include "../utilities/ImageDifference.hpp"
-#include "../utilities/BracketMethod.hpp"
-#include "../../lib/fftw3.h"
-#include "../../lib/CImg-1.5.0/CImg.h"
+#include "filter/MedianFilter.hpp"
+#include "fourier_transform/Fourier.hpp"
+#include "fourier_transform/InverseFourier.hpp"
+#include "fourier_transform/CosFourier.hpp"
+#include "fourier_transform/InverseCosFourier.hpp"
+#include "fourier_transform/SinFourier.hpp"
+#include "fourier_transform/InverseSinFourier.hpp"
+#include "templates/ImageTemplate.hpp"
+#include "templates/VectorArray2D.hpp"
+#include "templates/Vector2D.hpp"
+#include "solver/RKNystroem.hpp"
+#include "solver/RKV43.hpp"
+#include "utilities/ImageDifference.hpp"
+#include "utilities/BracketMethod.hpp"
+#include "CImg.h"
 
 #define MAXDOUBLE (1.7976931348623157e308)
 #define Re(c) (c)[0]

@@ -14,7 +14,7 @@
 #include "tbb/blocked_range.h"
 #include "tbb/tick_count.h"
 
-#include "../registration/FluidCurvatureRegistration.hpp"
+#include "registration/FluidCurvatureRegistration.hpp"
 
 #define RKN_TINY               (2.220446049250313e-16)
 #define RKN_OK             (0)

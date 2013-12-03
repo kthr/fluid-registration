@@ -9,7 +9,7 @@
 #define COSFOURIER_HPP_
 
 #include <math.h>
-#include "../../lib/fftw3.h"
+#include <fftw3.h>
 
 void CosFourier(double *out, double*in, int nx, int ny);
 

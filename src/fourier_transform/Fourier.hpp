@@ -9,7 +9,7 @@
 #define FOURIER_HPP_
 
 #include <math.h>
-#include "../../lib/fftw3.h"
+#include <fftw3.h>
 
 void Fourier(fftw_complex *out, fftw_complex *in, int nx, int ny);
 void Fourier(fftw_complex *out, double *in, int nx, int ny);

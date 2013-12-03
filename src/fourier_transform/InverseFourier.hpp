@@ -9,7 +9,7 @@
 #define INVERSEFOURIER_HPP_
 
 #include <math.h>
-#include "../../lib/fftw3.h"
+#include <fftw3.h>
 
 void InverseFourier(fftw_complex*out, fftw_complex*in, int nx, int ny);
 void InverseFourier(double*out, fftw_complex*in, int nx, int ny);

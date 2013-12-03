@@ -14,7 +14,7 @@
 #include <string.h>
 
 #include "Vector2D.hpp"
-#include "../templates/Parameters.hpp"
+#include "templates/Parameters.hpp"
 
 #define Address(i,j,nx,ny) ((i)+(nx)*(j))
 #define VectorArrayMagic 1447379762

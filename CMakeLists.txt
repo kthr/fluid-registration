@@ -20,6 +20,7 @@ set(SOURCES
 include_directories(
     src
     lib
+    /opt/local/include
 )
 
 add_custom_target(
