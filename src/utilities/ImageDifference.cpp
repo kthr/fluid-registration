@@ -31,7 +31,6 @@ double ImageDifference::operator()(double tp)
 		sampleImage->wrap(wraped, u2);
 		imgDiff = 0.0;
 
-#pragma omp parallel for reduction(+:imgDiff)
 		for (int j = 0; j < ny; j++)
 		{
 			double rsum = 0.0;

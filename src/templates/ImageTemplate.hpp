@@ -401,8 +401,6 @@ public:
 	}
 	inline void wrap(Image<T> *w, VectorArray2D*u)
 	{
-
-#pragma omp parallel for
 		for (int i = 0; i < nx; i++)
 			for (int j = 0; j < ny; j++)
 			{
@@ -416,7 +414,6 @@ public:
 				for (int ch = 0; ch < channelNo; ch++)
 				{
 					T val = interpolate(i - delta.x, j - delta.y, ch);
-#pragma omp critical
 					w->setc(i, j, ch, val);
 				}
 			}
@@ -1200,8 +1197,6 @@ public:
 		for (int ch = 0; ch < channelNo; ch++)
 		{
 			tArea = tBoundary = 0.0;
-
-#pragma omp parallel for reduction(+:tArea,tBoundary)
 			for (int y = 0; y < ny - 1; y++)
 			{
 				Point2D<double> c[4];

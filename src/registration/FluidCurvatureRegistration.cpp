@@ -214,7 +214,6 @@ void FluidCurvatureRegistration::PeriodicBiharmonicSolve(VectorArray2D*solution,
 	}
 	Fourier(_fxhat, _fx, nx, ny);
 	Fourier(_fyhat, _fy, nx, ny);
-#pragma omp parallel for
 	for (int l = 0; l < ny; l++)
 	{
 		double lambda = TwoPi * l / ny;
@@ -302,7 +301,6 @@ void FluidCurvatureRegistration::ZeroDerivativeBiharmonicSolve(VectorArray2D*sol
 	}
 	CosFourier(fxhat, fx, nx, ny);
 	CosFourier(fyhat, fy, nx, ny);
-#pragma omp parallel for
 	for (int l = 0; l < ny; l++)
 	{
 		double cl1 = cos((0.5 + l) * omegal);
@@ -384,7 +382,6 @@ void FluidCurvatureRegistration::ZeroBiharmonicSolve(VectorArray2D*solution, Vec
 	}
 	SinFourier(fxhat, fx, nx, ny);
 	SinFourier(fyhat, fy, nx, ny);
-#pragma omp parallel for
 	for (int l = 0; l < ny; l++)
 	{
 		double cl1 = cos((0.5 + l) * omegal);
@@ -455,7 +452,6 @@ void FluidCurvatureRegistration::PeriodicHarmonicSolve(VectorArray2D*solution, V
 	}
 	Fourier(_fxhat, _fx, nx, ny);
 	Fourier(_fyhat, _fy, nx, ny);
-#pragma omp parallel for
 	for (int l = 0; l < ny; l++)
 	{
 		double lambda = TwoPi * l / ny;
@@ -537,7 +533,6 @@ void FluidCurvatureRegistration::OverdampedZeroDerivativeHarmonicSolve(VectorArr
 	}
 	CosFourier(fxhat, fx, nx, ny);
 	CosFourier(fyhat, fy, nx, ny);
-#pragma omp parallel for
 	for (int l = 0; l < ny; l++)
 	{
 		double cl1 = cos((0.5 + l) * omegal);
@@ -613,7 +608,6 @@ void FluidCurvatureRegistration::ZeroDerivativeHarmonicSolve(VectorArray2D*solut
 	}
 	CosFourier(fxhat, fx, nx, ny);
 	CosFourier(fyhat, fy, nx, ny);
-#pragma omp parallel for
 	for (int l = 0; l < ny; l++)
 	{
 		double cl1 = cos((0.5 + l) * omegal);
@@ -689,7 +683,6 @@ void FluidCurvatureRegistration::ZeroHarmonicSolve(VectorArray2D*solution, Vecto
 	}
 	SinFourier(fxhat, fx, nx, ny);
 	SinFourier(fyhat, fy, nx, ny);
-#pragma omp parallel for
 	for (int l = 0; l < ny; l++)
 	{
 		double cl1 = cos((0.5 + l) * omegal);
@@ -762,7 +755,6 @@ void FluidCurvatureRegistration::PeriodicLameSolve(VectorArray2D*solution, Vecto
 	double lm = LameMu * LameLambda;
 	double lpm = LameMu + LameLambda;
 	double lpm2 = lpm * lpm;
-#pragma omp parallel for
 	for (int l = 0; l < ny; l++)
 	{
 		double omegal = TwoPi * l / ny;
@@ -861,7 +853,6 @@ void FluidCurvatureRegistration::OverdampedPeriodicBiharmonicSolve(VectorArray2D
 	}
 	Fourier(_fxhat, _fx, nx, ny);
 	Fourier(_fyhat, _fy, nx, ny);
-#pragma omp parallel for
 	for (int l = 0; l < ny; l++)
 	{
 		double lambda = TwoPi * l / ny;
@@ -952,7 +943,6 @@ void FluidCurvatureRegistration::OverdampedZeroDerivativeBiharmonicSolve(VectorA
 	}
 	CosFourier(fxhat, fx, nx, ny);
 	CosFourier(fyhat, fy, nx, ny);
-#pragma omp parallel for
 	for (int l = 0; l < ny; l++)
 	{
 		double cl1 = cos((0.5 + l) * omegal);
@@ -1036,7 +1026,6 @@ void FluidCurvatureRegistration::OverdampedZeroBiharmonicSolve(VectorArray2D*sol
 	}
 	SinFourier(fxhat, fx, nx, ny);
 	SinFourier(fyhat, fy, nx, ny);
-#pragma omp parallel for
 	for (int l = 0; l < ny; l++)
 	{
 		double cl1 = cos((0.5 + l) * omegal);
@@ -1109,7 +1098,6 @@ void FluidCurvatureRegistration::OverdampedPeriodicHarmonicSolve(VectorArray2D*s
 	}
 	Fourier(_fxhat, _fx, nx, ny);
 	Fourier(_fyhat, _fy, nx, ny);
-#pragma omp parallel for
 	for (int l = 0; l < ny; l++)
 	{
 		double lambda = TwoPi * l / ny;
@@ -1190,7 +1178,6 @@ void FluidCurvatureRegistration::OverdampedZeroHarmonicSolve(VectorArray2D*solut
 	}
 	SinFourier(fxhat, fx, nx, ny);
 	SinFourier(fyhat, fy, nx, ny);
-#pragma omp parallel for
 	for (int l = 0; l < ny; l++)
 	{
 		double cl1 = cos((0.5 + l) * omegal);
@@ -1258,7 +1245,6 @@ void FluidCurvatureRegistration::FluidLame(double, double*y, double*dy, int n)
 
 	wraped = new Image<double>(nx, ny, 1);
 	sampleImage->wrap(wraped, u);
-#pragma omp parallel for
 	for (int j = 0; j < ny; j++)
 		for (int i = 0; i < nx; i++)
 		{
@@ -1303,7 +1289,6 @@ void FluidCurvatureRegistration::FluidOverDamped(double, double*y, double*dy, in
 	f->vy = dy + size;
 
 	sampleImage->wrap(__wraped, u);
-#pragma omp parallel for
 	for (int j = 0; j < ny; j++)
 		for (int i = 0; i < nx; i++)
 		{
@@ -1318,7 +1303,6 @@ void FluidCurvatureRegistration::FluidOverDamped(double, double*y, double*dy, in
 		}
 	if (VortexWeight > 0.0)
 	{
-#pragma omp parallel for
 		for (int j = 0; j < ny; j++)
 			for (int i = 0; i < nx; i++)
 			{
@@ -1365,7 +1349,6 @@ void FluidCurvatureRegistration::FluidBiharmonic(double*d2y, double, double*y, d
 	f->vy = d2y + size;
 
 	sampleImage->wrap(__wraped, u);
-#pragma omp parallel for
 	for (int j = 0; j < ny; j++)
 		for (int i = 0; i < nx; i++)
 		{
@@ -1379,7 +1362,6 @@ void FluidCurvatureRegistration::FluidBiharmonic(double*d2y, double, double*y, d
 		}
 	(this->*BiharmonicSolve)(f, f);
 
-#pragma omp parallel for
 	for (int j = 0; j < ny; j++)
 		for (int i = 0; i < nx; i++)
 		{
@@ -1436,7 +1418,6 @@ int FluidCurvatureRegistration::PrintFluidProgress(double t, double h, double*u,
 	sampleImage->wrap(__wraped, u2);
 	imgDiff = 0.0;
 
-#pragma omp parallel for reduction(+:imgDiff)
 	for (int j = 0; j < ny; j++)
 	{
 		double rsum = 0.0;
@@ -1516,7 +1497,6 @@ int FluidCurvatureRegistration::PrintFluidProgress1(double t, double h, double*u
 	sampleImage->wrap(__wraped, u2);
 	imgDiff = 0.0;
 
-#pragma omp parallel for reduction(+:imgDiff)
 	for (int j = 0; j < ny; j++)
 	{
 		double rsum = 0.0;
