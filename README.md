@@ -1,3 +1,5 @@
+This is a implementation of the fluid registration published in [Fast fluid extensions for image registration algorithms](https://ieeexplore.ieee.org/document/4712278).
+
 Dependencies
 ---------------
 First install the following dependencies:
